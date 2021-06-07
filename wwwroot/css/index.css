@@ -1,0 +1,457 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.landing__h1 {
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.landing__h2 {
+    font-size: 36px;
+    font-weight: 500;
+}
+
+.landing__text {
+    font-size: 36px;
+    font-weight: 300;
+}
+
+.landing__highlight {
+    color: #00926B;
+}
+
+.landing__link { 
+    font-size: 24px;
+    font-weight: 300;
+    text-decoration: none;
+}
+
+.landing__button {
+    display: block;
+    padding: 10px 0px;
+    text-align: center;
+    height: max-content;
+    border: 4px solid #00926B;
+    border-radius: 16px;
+    color: white;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 300;
+}
+
+.landing__button:hover {
+    background-color: rgba(151, 201, 188, 0.3);
+    transition: 0.5s;
+}
+
+header {
+    padding-top: 60px;
+    height: 50px;
+    width: 100%;
+    position: absolute;
+    display: grid;
+    grid-template-columns: auto max-content;
+    align-items: center;
+    z-index: 999;
+}
+
+.page__header-navigation {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, max-content);
+    grid-column-gap: 20px;
+    padding-right: 240px;
+    align-items: center;
+}
+
+.page__header-logo, .page__header-logo-2 {
+    color: #00926B;
+    font-size: 36px;
+    font-weight: 500;
+}
+
+.page__header-logo-2 {
+    color: white;
+}
+
+.page__header-navigation > .landing__link {
+    color: white;
+    font-size: 24px;
+    font-weight: 300;
+    text-decoration: none; 
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.page__header-navigation > .landing__button {
+    transition: 0.5s;
+    width: 270px;
+}
+
+.page__header-logo {
+    padding-left: 240px;
+}
+
+.page__first {
+    background-image: url(../media/images/landing/land-image.png);
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+    justify-content: center;
+    height: 100vh; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.page__first-information {
+    position: relative;
+    padding-top: 70px;
+    padding-left: 240px;
+    padding-right: 40%;
+}
+
+.page__first-information > .landing__h1 {
+    font-size: 56px;
+    color: white;
+}
+
+.page__first-information > .landing__h2 {
+    margin-top: 20px;
+    color: white;
+}
+
+.page__first-information > .landing__text {
+    color: white;
+    font-size: 24px;
+    margin-top: 52px;
+}
+
+    .page__first-information > .landing__button {
+        margin-top: 100px;
+        width: 270px;
+    }
+
+
+.page__purpose {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+}
+
+.page__purpose-texts {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    margin-left: 240px;
+    margin-right: 150px;
+}
+
+.page__purpose-texts > .landing__h1 {
+    height: max-content;
+    position: relative;
+}
+
+.page__purpose-texts > .landing__text {
+    padding-top: 72px;
+    height: max-content;
+    position: relative;
+}
+
+.purpose__image-frame {
+    background-image: url(../media/images/landing/purpose-image.jpg);
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.system__slider-wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+    align-self: center;
+}
+
+.system__slider {
+    align-self: center;
+    margin-bottom: 64px;
+    width: 100%;
+}
+
+.image__container {
+    z-index: 100;
+    overflow: hidden;
+    width: inherit;
+}
+
+.image__container > div {
+    /* overflow: hidden; */
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    transition: left .2s;
+}
+
+.image__container > div > img {
+    margin-right: 64px;
+    margin-left: 64px;
+    width: 850px;
+    height: 100%;
+}
+
+.button__next, .button__prev { 
+    z-index: 200;
+}
+
+.button__next {
+    right: 0;
+    position: absolute;
+    height: 100%;
+    width: 500px;
+
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}
+
+.button__prev {
+    left: 0;
+    position: absolute;
+    height: 100%;
+    width: 500px;
+
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}
+
+.page__system {
+    overflow-x: hidden;
+    height: 120vh;
+    background-color: #333;
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+}
+
+.page__system > .landing__h1 {
+    padding-left: 240px;
+    padding-top: 120px;
+    padding-bottom: 60px;
+    color: white;
+    text-align: left;
+}
+
+.page__system > .landing__text {
+    padding-left: 240px;
+    padding-right: 240px;
+    padding-bottom: 70px;
+    font-size: 24px;
+    text-align: left;
+    color: white;
+}
+
+.page__reg {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 100%;
+    height: 60vh;
+}
+
+.page__reg > h1 {
+    padding-top: 120px;
+    padding-bottom: 80px;
+}
+
+.page__reg > .landing__text {
+    padding-left: 240px;
+    padding-right: 240px;
+    padding-bottom: 70px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.page__reg > .landing__button {
+    font-size: 30px;
+    font-weight: 500;
+    color: black;
+    width: 340px;
+}
+
+@media screen and (max-width: 1500px) {
+    .page__header-logo, .page__header-logo-2 {
+        font-size: 24px;
+    }
+
+    .page__header-navigation > .landing__link {
+        font-size: 18px;
+    }
+
+    .page__header-navigation > .landing__button {
+        width: 180px;
+        font-size: 18px;
+    }
+
+    .landing__h1 {
+        font-size: 36px;
+    }
+    
+    .landing__h2 {
+        font-size: 24px;
+    }
+    
+    .landing__text {
+        font-size: 24px;
+    }
+
+    .page__system > .landing__text {
+        font-size: 18px;
+    }
+
+    .page__reg > .landing__text {
+        font-size: 18px;
+    }
+
+    .button__prev, .button__next {
+        width: 300px;
+    }
+
+    .page__reg > .landing__button {
+        font-size: 20px;
+        width: 240px;
+    }
+
+    .image__container > div > img {
+        margin-right: 56px;
+        margin-left: 56px;
+        width: 600px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .page__header-navigation > .landing__link {
+        display: none;
+    }
+    .page__header-navigation {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .page__header-logo, .page__header-logo-2 {
+        font-size: 20px;
+    }
+
+    .page__header-logo {
+        padding-left: 120px;
+    }
+
+    .page__header-navigation {
+        padding-right: 120px;
+    }
+
+    .page__first-information {
+        padding-left: 120px;
+        padding-right: 120px;
+        align-items: center;
+    }
+
+    .page__first-information {
+        display: flex;
+        flex-flow: column;
+        text-align: center;
+        align-content: center;
+    }
+
+    .page__first-information > .landing__h1 {
+        padding-top: 60px;
+        font-size: 36px;
+    }
+    
+    .page__first-information > .landing__h2 {
+        margin-top: 14px;
+    }
+    
+    .page__first-information > .landing__text {
+        font-size: 18px;
+        margin-top: 52px;
+    }
+    
+    .page__first-information > .landing__button {
+        margin-top: 100px;
+    }
+
+    .page__purpose {
+        display: flex;
+        flex-flow: column;
+    }
+
+    .page__purpose-texts {
+        margin-left: 120px;
+        margin-right: 120px;
+        margin-bottom: 32px;
+        margin-top: 32px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .page__purpose-texts > .landing__h1 {
+        padding-top: 60px;
+        font-size: 24px;
+    }
+
+    .page__purpose-texts > .landing__text {
+        font-size: 18px;
+    }
+
+    .page__system {
+        align-items: center;
+        text-align: center;
+    }
+
+    .page__system > .landing__h1 {
+        padding-top: 60px;
+        padding-left: 120px;
+        padding-right: 120px;
+        font-size: 24px;
+    }
+
+    .page__system > .landing__text {
+        text-align: center;
+        font-size: 18px;
+        padding-left: 120px;
+        padding-right: 120px;
+    }
+
+    .page__reg > .landing__text {
+        font-size: 18px;
+        padding-left: 120px;
+        padding-right: 120px;
+    }
+
+    .page__reg > .landing__h1 {
+        text-align: center;
+        font-size: 24px;
+        padding-left: 120px;
+        padding-right: 120px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .page__reg {
+        height: 100vh;
+    }
+}

@@ -1,0 +1,49 @@
+﻿@model Plan_io_T.ViewModels.RequestViewModel
+
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/form.css'>
+</asp:Content>
+
+<div class="page__main-content"></div>
+
+<h1>Подача заявки на регистрацию</h1>
+<form method="post" asp-controller="Account" asp-action="Register">
+    <div>
+        <div>
+            <label asp-for="Email" class="reg_email-label"></label><br />
+            <input asp-for="Email" class="reg_email-input" />
+            <span asp-validation-for="Email"></span>
+
+            <label asp-for="Password" class="reg_password-label"></label><br />
+            <input asp-for="Password" class="reg_password-input" />
+            <span asp-validation-for="Password"></span>
+
+            <label asp-for="PasswordConfirm" class="reg_repeat-label"></label><br />
+            <input asp-for="PasswordConfirm" class="reg_repeat-input" />
+            <span asp-validation-for="PasswordConfirm"></span>
+
+            <label asp-for="Name" class="reg_name-label"></label><br />
+            <input asp-for="Name" class="reg_name-input" />
+            <span asp-validation-for="Name"></span>
+
+            <label asp-for="Surname" class="reg_surname-label"></label><br />
+            <input asp-for="Surname" class="reg_surname-input" />
+            <span asp-validation-for="Surname"></span>
+        </div>
+
+        <label asp-for="ReqText"></label><br />
+        <textarea asp-for="ReqText" class="reg_reason-input"></textarea>
+        <span asp-validation-for="ReqText"></span>
+
+    </div>
+
+    <div>
+        <input type="submit" value="Регистрация" class="reg__button" />
+    </div>
+
+    <div asp-validation-summary="ModelOnly"></div>
+</form>

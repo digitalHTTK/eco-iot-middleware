@@ -1,0 +1,32 @@
+﻿@model Plan_io_T.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Вход";
+}
+
+<asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/login.css'>
+</asp:Content>
+
+<h1>Авторизация</h1>
+<form method="post" asp-controller="Account" asp-action="Login"
+      asp-route-returnUrl="@Model.ReturnUrl">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Email"></label><br />
+        <input asp-for="Email" class="login_email-input"/>
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="Password"></label><br />
+        <input asp-for="Password" class="login_password-input"/>
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="RememberMe"></label><br />
+        <input asp-for="RememberMe" />
+    </div>
+    <div>
+        <input type="submit" value="Войти" class="login__button"/>
+    </div>
+</form>

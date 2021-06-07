@@ -1,0 +1,269 @@
+﻿@model IEnumerable<Plan_io_T.Models.ArduinoData>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
+    <link rel='stylesheet' type='text/css' media='screen' href='~/css/dashboard.css' runat="server">
+    <link rel='stylesheet' type='text/css' media='screen' href='~/css/footer.css' runat="server">
+</asp:Content>
+
+<header>
+    <a class="page__header-logo" asp-controller="Home" asp-action="Index">Plan<span class="page__header-logo-2">(io)</span>T</a>
+    <div class="page__header-nav">
+        <p class="page__header-cur">Панель управления</p>
+        <a asp-controller="Data" asp-action="System">Система</a>
+    </div>
+    <div class="page__header-user" style="cursor: pointer;" onclick="dropdown()">
+        <div class="page__dropdown" id="page__dropdown">
+            @if (User.IsInRole("admin")) {
+                <a class="page__dropdown-out" asp-controller="Users" asp-action="Index">Войти в панель администрации</a>
+            }
+        <form method="post" asp-controller="Account" asp-action="Logout">
+            <input class="page__out-button" type="submit" value="Выйти из аккаунта" />
+        </form>
+        </div>
+        <div class="page__menu">
+            @if (User.IsInRole("admin")) {
+                <p class="page__menu-name">Администратор</p>
+            } else {
+                <p class="page__menu-name">Пользователь</p>
+            }
+            <p class="page__menu-mail">@User.Identity.Name</p>
+        </div>
+        <div>
+            @if (User.IsInRole("admin")) {
+                <div class="page__header-avatar">SU</div>
+            } else {
+                <div class="page__header-avatar" style="background-color: #00926B;">CU</div>
+            }
+        </div>
+    </div>
+</header>
+
+<div class="page__menu-background" onclick="hideBackground()"></div>
+
+<div class="page__main-content">
+
+    <div class="page__main-card">
+        <div>
+            <p>Добро пожаловать, @User.Identity.Name</p>
+            <div class="page__main-card-rating">
+                <div class="page__main-card-rating-num">@ViewData["Score"]</div>
+                <div class="page__main-card-rating-text">
+                    <h1>Оценка условий жизни растения</h1>
+                    <div>На основе данных мониторинга</div>
+                </div>
+            </div>
+        </div>
+        <div class="page__main-card-par">
+            <h1>Текущие параметры</h1>
+            <div class="page__main-card-par-all">
+                <div class="page__main-card-par-sep">
+                    <div class="page__main-card-par-sep-h">время</div>
+                    <div class="page__main-card-par-sep-data time">@ViewData["Time"]</div>
+                </div>
+                <div class="page__main-card-par-sep">
+                    <div class="page__main-card-par-sep-h">температура ОВ</div>
+                    <div class="page__main-card-par-sep-data temp">@ViewData["Temperature"]</div>
+                </div>
+                <div class="page__main-card-par-sep">
+                    <div class="page__main-card-par-sep-h">влажность ОВ</div>
+                    <div class="page__main-card-par-sep-data humi">@ViewData["Humidity"]</div>
+                </div>
+                <div class="page__main-card-par-sep">
+                    <div class="page__main-card-par-sep-h">влажность почвы</div>
+                    <div class="page__main-card-par-sep-data mois">@ViewData["Moisture"]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page__small-card">
+
+        <div class="page__small-card-content-buttons">
+            <h1>Режим полива растений</h1>
+            <p>Выбор режима полива растений</p>
+            <form>
+                <div>
+                    <button class="relay_buttons" id="relay-on">Вкл.</button>
+                    <button class="relay_buttons page__button-checked" id="relay-off">Выкл.</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="page__small-card-content-buttons">
+            <h1>Данные мониторинга</h1>
+            <p>Таблица с данными мониторинга</p>
+            <form>
+                <div>
+                    <button id="get-data">Забрать данные</button>
+                    <button asp-controller="ArduinoDatas" asp-action="Index">Перейти</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="page__small-card-content-buttons">
+            <h1>Режим работы фитоламп</h1>
+            <p>Выбор режима работы фитоламп</p>
+            <form>
+                <div>
+                    <button class="bulb_buttons" id="bulb-on">Вкл.</button>
+                    <button class="bulb_buttons page__button-checked" id="bulb-off">Выкл.</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<footer class="page__footer">
+    <div class="footer__socials">
+        <div>
+            <div class="footer__vk-icon"></div>
+            <a class="landing__link" href="https://www.vk.com/funny_yellow_dog">vk.com/funny_yellow_dog</a>
+        </div>
+        <div>
+            <div class="footer__email-icon"></div>
+            <div class="landing__link">example@mail.ru</div>
+        </div>
+    </div>
+    <div class="footer__about">
+        <div>Plan(io)t, 2020</div>
+    </div>
+</footer>
+
+
+@section Scripts{
+    <script src="~/js/jQuery.js"></script>
+    <script src="~/js/dropdown.js"></script>
+    <script>
+        let buttons   = document.querySelectorAll(".relay_buttons");
+        let buttons_2 = document.querySelectorAll(".bulb_buttons");
+
+        buttons.forEach(but => but.addEventListener("click", pressedHandler));
+        buttons_2.forEach(but => but.addEventListener("click", pressedHandler_2));
+
+        function pressedHandler(event) {
+            event.preventDefault();
+            let target = event.target;
+            buttons.forEach(but => but.classList.remove("page__button-checked"));
+            target.classList.add("page__button-checked");
+        }
+
+        function pressedHandler_2(event) {
+            event.preventDefault();
+            let target = event.target;
+            buttons_2.forEach(but => but.classList.remove("page__button-checked"));
+            target.classList.add("page__button-checked");
+        }
+
+        function ajaxR() {
+            $.ajax({
+                url: "SendDataToFront",
+                headers: {
+                    'Accept': 'application/json, text/javascript, /, q=0.01',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                },
+                type: "GET",
+                success: function (data) {
+                    let jsonData = JSON.parse(data);
+                    let newDate = new Date();
+                    let timeStr = newDate.getHours() + ":" + (newDate.getMinutes());
+                    document.querySelector(".time").textContent = timeStr;
+                    document.querySelector(".temp").textContent = jsonData.Temperature;
+                    document.querySelector(".humi").textContent = jsonData.Humidity;
+                    document.querySelector(".mois").textContent = jsonData.Moisture;
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function ajaxRelOn() {
+            $.ajax({
+                url: "SendPost?command=AR1",
+                headers: {
+                    'Accept': 'application/json, text/javascript, /, q=0.01',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                },
+                type: "POST",
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function ajaxBuzOn() {
+            $.ajax({
+                url: "SendPost?command=AZ1",
+                headers: {
+                    'Accept': 'application/json, text/javascript, /, q=0.01',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                },
+                type: "POST",
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function ajaxBuzOff() {
+            $.ajax({
+                url: "SendPost?command=AZ0",
+                headers: {
+                    'Accept': 'application/json, text/javascript, /, q=0.01',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                },
+                type: "POST",
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function ajaxRelOff() {
+            $.ajax({
+                url: "SendPost?command=AR0",
+                headers: {
+                    'Accept': 'application/json, text/javascript, /, q=0.01',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                },
+                type: "POST",
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function ajaxGetData() {
+            $.ajax({
+                url: "NewRecord",
+                headers: {
+                    'Accept': 'application/json, text/javascript, /, q=0.01',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                },
+                type: "POST",
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        setInterval(ajaxR, 1000 * 20);
+        $('#bulb-on').click(ajaxBuzOn);
+        $('#bulb-off').click(ajaxBuzOff);
+        $('#relay-on').click(ajaxRelOn);
+        $('#relay-off').click(ajaxRelOff);
+        $('#get-data').click(ajaxGetData);
+    </script>
+}

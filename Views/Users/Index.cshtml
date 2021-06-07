@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Plan_io_T.Models.User>
+
+@{
+    ViewBag.Title = "Список пользователей";
+}
+
+<asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/admin-users.css'>
+</asp:Content>
+
+<div class="page__background"></div>
+<header>
+    <a class="page__header-logo" asp-controller="Home" asp-action="Index">Plan<span class="page__header-logo-2">(io)</span>T</a>
+    <div class="page__header-user" style="cursor: pointer;" onclick="dropdown()">
+        <div class="page__dropdown" id="page__dropdown">
+            <a class="page__dropdown-out" asp-controller="Data" asp-action="Dashboard">Выйти из панели администрации</a>
+            <form method="post" asp-controller="Account" asp-action="Logout">
+                <input type="submit" value="Выйти из аккаунта" />
+            </form>
+        </div>
+        <div class="page__menu">
+            @if (User.IsInRole("admin")) {
+                <p class="page__menu-name">Администратор</p>
+            } else {
+                <p class="page__menu-name">Пользователь</p>
+            }
+            <p class="page__menu-mail">@User.Identity.Name</p>
+        </div>
+        <div>
+            @if (User.IsInRole("admin")) {
+                <div class="page__header-avatar">SU</div>
+            } else {
+                <div class="page__header-avatar">Us</div>
+            }
+        </div>
+    </div>
+</header>
+
+<div class="page__menu-background" onclick="hideBackground()"></div>
+
+<div class="page__main-content">
+    <table>
+        <caption>Пользователи</caption>
+        <thead class="page__users-table-head">
+            <tr>
+                <td>Адрес электронной почты</td>
+                <td>Имя</td>
+                <td>Фамилия</td>
+                <td>Роль</td>
+                <td>Причина регистрации</td>
+                <td>Действия</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var user in Model) {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.Name</td>
+                <td>@user.Surname</td>
+
+                @if (user.Role == "admin") {
+                    <td class="page__users-admin">Администратор</td>
+                } else if (user.Role == "user") {
+                    <td class="page__users-user">Пользователь</td>
+                } else {
+                    <td class="page__users-user">Неактивированный</td>
+                }
+
+                <td>@user.ReqText</td>
+
+                <td class="page__table-icons">
+                    <form>
+                        <a class="page__table-edit" asp-action="Edit" asp-route-id="@user.Id"></a>
+                    </form>
+                    <form>
+                        <a class="page__table-pass" asp-action="ChangePassword" asp-route-id="@user.Id"></a>
+                    </form>
+                    <form asp-action="ActivateUser" asp-route-id="@user.Id" method="post">
+                        <button type="submit" class="page__table-accept"></button>
+                    </form>
+                    <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                        <button type="submit" class="page__table-delete" class="page__table-delete"></button>
+                    </form>
+                </td>
+            </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+<script src="js/dropdown.js"></script>

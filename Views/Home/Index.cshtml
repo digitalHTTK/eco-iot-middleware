@@ -1,0 +1,143 @@
+﻿@{
+    ViewData["Title"] = "Главная";
+}
+
+<asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
+    <link href="~/css/index.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/footer.css" rel="stylesheet" type="text/css" />
+</asp:Content>
+
+<header>
+    <div class="page__header-logo">Plan<span class="page__header-logo-2">(io)</span>T</div>
+    <div class="page__header-navigation">
+        <a class="landing__link" href="#purpose">Цель ресурса</a>
+        <a class="landing__link" href="#system">Система</a>
+        <a class="landing__link" href="#reg">Подать заявку</a>
+        @if (User.Identity.IsAuthenticated) {
+            <a class="landing__button" asp-controller="Data" asp-action="Dashboard">Войти</a>
+        } else {
+            <a class="landing__button" asp-controller="Home" asp-action="Choice">Присоединиться</a>
+        }
+    </div>
+</header>
+
+<main class="page__main">
+    <div class="page__first" id="page__first">
+        <div class="page__first-information">
+            <h1 class="landing__h1">Хотите испытать IoT в деле?</h1>
+            <h2 class="landing__h2">Вы попали в <span class="landing__highlight">правильное</span> место</h2>
+            <div class="landing__text">Представляем Вам небольшую интерактивную IoT-систему, предназначенную  для контроля роста растения </div>
+            <a class="landing__button" href="#system">Узнать больше</a>
+        </div>
+    </div>
+
+    <div class="page__purpose" id="purpose">
+        <div class="page__purpose-texts">
+            <h1 class="landing__h1">Цель ресурса</h1>
+            <div class="landing__text">
+                Мы поставили целью показать вам, как работает IoT-системы на примере несложной системы по автоматическому уходу за растением, ведь на практике изучать что-то новое куда проще!
+                Просто зарегистрируйтесь на нашем ресурсе, подав заявку, и вы получите доступ к управлению описанной ниже системы.
+            </div>
+        </div>
+        <div class="purpose__image-frame"></div>
+    </div>
+
+    <div class="page__system" id="system">
+        <h1 class="landing__h1">Система</h1>
+        <div class="landing__text">Под управлением данной платформы находится система, обеспечивающая мониторинг и базовый уход за простым комнатным растением. Система контролирует влажность почвы, окружающую температуру и влажность, освещенность, а также управляет поливом растения и работой фитолампы.</div>
+
+        <div class="system__slider-wrapper">
+            <div class="system__slider">
+                <button class="button__prev" type="button" name="button"></button>
+                <button class="button__next" type="button" name="button"></button>
+                <div class="image__container">
+                    <div class="">
+                        <img class="carousel-image" src="media/images/carousel/1.jpg" alt="">
+                        <img class="carousel-image" src="media/images/carousel/1.jpg" alt="">
+                        <img class="carousel-image" src="media/images/carousel/1.jpg" alt="">
+                        <img class="carousel-image" src="media/images/carousel/1.jpg" alt="">
+                        <img class="carousel-image" src="media/images/carousel/1.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="system__slider-nav"></div>
+    </div>
+
+    <div class="page__reg">
+        <h1 class="landing__h1" id="reg">Правила регистрации</h1>
+        <div class="landing__text">Мы не можем просто так вас зарегистрировать - вы должны подать заявку на регистрации, используя форму по ссылке ниже. В этой форме вы должны объяснить причины вашей регистрации на сайте, чем подробнее будет ответ - тем выше шанс, что мы вас зарегистрируем. Не бойтесь и не стесняйтесь, это процедура лишь дополнительная мера безопасности!</div>
+        <a class="landing__button" asp-controller="Account" asp-action="Register">Подать заявку</a>
+    </div>
+
+</main>
+
+<footer class="page__footer">
+    <div class="footer__socials">
+        <div>
+            <div class="footer__vk-icon"></div>
+            <a class="landing__link" href="https://www.vk.com/funny_yellow_dog">vk.com/funny_yellow_dog</a>
+        </div>
+        <div>
+            <div class="footer__email-icon"></div>
+            <div class="landing__link">example@mail.ru</div>
+        </div>
+    </div>
+    <div class="footer__about">
+        <div>Plan(io)t, 2020</div>
+    </div>
+</footer>
+
+<script>
+    window.onload = () => {
+        let carousel = document.querySelector(".system__slider"),
+            imageContainer = carousel.querySelector(".image__container"),
+            image = imageContainer.querySelectorAll(".carousel-image"),
+            prev = carousel.querySelector(".button__prev"),
+            next = carousel.querySelector(".button__next");
+
+        let currentIndex, currentOffset, slideWidth;
+
+        init();
+        window.addEventListener("resize", init);
+
+        prev.addEventListener("click", () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+            }
+            currentOffset = calcOffset(currentIndex, slideWidth);
+            setOffset(currentOffset, imageContainer);
+            console.log(currentIndex);
+        });
+
+        next.addEventListener("click", () => {
+            if (currentIndex < image.length - 1) {
+                currentIndex++;
+            }
+            currentOffset = calcOffset(currentIndex, slideWidth);
+            setOffset(currentOffset, imageContainer);
+            console.log(currentIndex);
+        });
+
+        function calcOffset(index, slideWidth) {
+            return -(index * slideWidth - slideWidth);
+        }
+
+        function setOffset(offset, container) {
+            container.querySelector("div").style.left = offset + "px";
+        }
+
+        function init() {
+            slideWidth = parseInt(window.getComputedStyle(image[0], null).width) +
+                parseInt(window.getComputedStyle(image[0], null).paddingLeft) * 2 +
+                parseInt(window.getComputedStyle(image[0], null).marginLeft) * 2;
+
+            currentIndex = 3;
+            currentOffset = calcOffset(currentIndex, slideWidth);
+            imageContainer.style.width = currentIndex * slideWidth + "px";
+
+            setOffset(currentOffset, imageContainer);
+        }
+    }
+</script>

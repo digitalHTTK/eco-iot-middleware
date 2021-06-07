@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Действие с аккаунтом";
+}
+
+<asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/choice.css'>
+</asp:Content>
+
+<h1>Вам нужно войти или зарегистрироваться?</h1>
+<div>
+    <a asp-controller="Account" asp-action="Login">Войти</a>
+    <a asp-controller="Account" asp-action="Register">Зарегистрироваться</a>
+</div>

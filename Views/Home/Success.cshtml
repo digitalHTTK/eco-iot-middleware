@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Успешно";
+}
+
+<asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/success.css'>
+</asp:Content>
+
+<div>
+    <h1>Подача заявки на регистрацию</h1>
+    <p>Ваша заявка отправлена. Администратор обработает ее в течение двух рабочих дней и отправит ответ на указанный адрес электронной почты.</p>
+    <a asp-controller="Home" asp-action="Index">На главную</a>
+</div>

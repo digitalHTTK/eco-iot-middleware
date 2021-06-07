@@ -1,0 +1,137 @@
+﻿@{
+    ViewBag.Title = "Подключенная система";
+}
+
+<asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
+    <link rel='stylesheet' type='text/css' media='screen' href='~/css/footer.css' runat="server">
+    <link rel='stylesheet' type='text/css' media='screen' href='~/css/admin-sys.css'>
+</asp:Content>
+
+<div class="page__background"></div>
+<header>
+    <a class="page__header-logo" asp-controller="Home" asp-action="Index">Plan<span class="page__header-logo-2">(io)</span>T</a>
+    <div class="page__header-nav">
+        <a asp-action="Dashboard" asp-controller="Data">Панель управления</a>
+        <p class="page__header-cur">Система</p>
+    </div>
+    <div class="page__header-user" style="cursor: pointer;" onclick="dropdown()">
+        <div class="page__dropdown" id="page__dropdown">
+            @if (User.IsInRole("admin")) {
+                <a class="page__dropdown-out" asp-controller="Users" asp-action="Index">Войти в панель администрации</a>
+            }
+            <form method="post" asp-controller="Account" asp-action="Logout">
+                <input class="page__out-button" type="submit" value="Выйти из аккаунта" />
+            </form>
+        </div>
+        <div class="page__menu">
+            @if (User.IsInRole("admin")) {
+                <p class="page__menu-name">Администратор</p>
+            } else {
+                <p class="page__menu-name">Пользователь</p>
+            }
+            <p class="page__menu-mail">@User.Identity.Name</p>
+        </div>
+        <div>
+            @if (User.IsInRole("admin")) {
+                <div class="page__header-avatar">SU</div>
+            } else {
+                <div class="page__header-avatar" style="background-color: #00926B;">CU</div>
+            }
+        </div>
+    </div>
+</header>
+
+<div class="page__menu-background" onclick="hideBackground()"></div>
+
+<div class="page__main-content">
+
+    <div class="page__main-card">
+        <div>
+            <p>Свойства устройства</p>
+            <div class="page__main-card-rating">
+                <form asp-action="ConectDevice" method="post">
+                    <button class="page__button-checked" type="submit">Подключить порт</button>
+                </form>
+            </div>
+        </div>
+        <div class="page__main-card-par">
+            <h1>Параметры подключения</h1>
+            <div class="page__main-card-par-all">
+                <div class="page__main-card-par-sep">
+                    <div class="page__main-card-par-sep-h">порт</div>
+                    <div class="page__main-card-par-sep-data">COM6</div>
+                </div>
+                <div class="page__main-card-par-sep">
+                    <div class="page__main-card-par-sep-h">скорость</div>
+                    <div class="page__main-card-par-sep-data">115200 бод</div>
+                </div>
+                <div class="page__main-card-par-sep">
+                    <div class="page__main-card-par-sep-h">интерфейс</div>
+                    <div class="page__main-card-par-sep-data">USB</div>
+                </div>
+                <div class="page__main-card-par-sep">
+                    <div class="page__main-card-par-sep-h">тип</div>
+                    <div class="page__main-card-par-sep-data">Serial</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page__small-card">
+        <div class="page__small-card-content">
+            <h1>Эхо-опрос Arduino</h1>
+            <p>Вывод ответа в интерфейс</p>
+            <form asp-action="System" asp-route-_device="arduino" method="post">
+                <button type="submit">Выполнить</button>
+            </form>
+            <h1>Вывод</h1>
+            <div class="page__small-card-output">
+                @ViewData["ArduinoEcho"]
+            </div>
+        </div>
+
+        <div class="page__small-card-content">
+            <h1>Эхо-опрос датчиков</h1>
+            <p>Вывод ответа в интерфейс</p>
+            <form asp-action="System" asp-route-_device="sensors" method="post">
+                <button type="submit">Выполнить</button>
+            </form>
+            <h1>Вывод</h1>
+            <div class="page__small-card-output">
+                @ViewData["SensorsEcho"]
+            </div>
+        </div>
+
+        <div class="page__small-card-content">
+            <h1>Эхо-опрос реле и сервомоторов</h1>
+            <p>Ответ в виде физической реакции компонентов</p>
+            <form asp-action="System" asp-route-_device="relay" method="post">
+                <button type="submit">Выполнить</button>
+            </form>
+            <h1>Вывод</h1>
+            <div class="page__small-card-output">
+                @ViewData["RelayEcho"]
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<footer class="page__footer">
+    <div class="footer__socials">
+        <div>
+            <div class="footer__vk-icon"></div>
+            <a class="landing__link" href="https://www.vk.com/funny_yellow_dog">vk.com/funny_yellow_dog</a>
+        </div>
+        <div>
+            <div class="footer__email-icon"></div>
+            <div class="landing__link">example@mail.ru</div>
+        </div>
+    </div>
+    <div class="footer__about">
+        <div>Plan(io)t, 2020</div>
+    </div>
+</footer>
+
+<script src="~/js/dropdown.js"></script>

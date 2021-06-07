@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Plan_io_T.Models.ArduinoData>
+
+@{
+    ViewData["Title"] = "Вывод данных";
+}
+
+<asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</asp:Content>
+
+<div class="container">
+    <main role="main" class="pb-3">
+        <h1>Вывод данных</h1>
+
+        @if (User.IsInRole("admin")) {
+            <p>
+                <a asp-action="Create">Создать</a>
+            </p>
+        }
+
+        <p>
+            <a asp-controller="Data" asp-action="Dashboard">Назад к панели управления</a>
+        </p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Moisture)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Humidity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Temperature)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Illumination)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Moisture)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Humidity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Temperature)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Illumination)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ID">Ред.</a> |
+                            <a asp-action="Details" asp-route-id="@item.ID">Подробно</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ID">Удалить</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+</div>
+
+
