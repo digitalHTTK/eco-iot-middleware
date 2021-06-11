@@ -52,7 +52,7 @@ namespace Plan_io_T.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Moisture,Humidity,Temperature,Illumination")] ArduinoData arduinoData)
+        public async Task<IActionResult> Create([Bind("ID,Temperature,Humidity,CO,CO2,LPG,Smoke")] ArduinoData arduinoData)
         {
             if (ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace Plan_io_T.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Moisture,Humidity,Temperature,Illumination")] ArduinoData arduinoData)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Temperature,Humidity,CO,CO2,LPG,Smoke")] ArduinoData arduinoData)
         {
             if (id != arduinoData.ID)
             {

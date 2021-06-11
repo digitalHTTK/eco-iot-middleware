@@ -20,11 +20,6 @@
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="Moisture" class="control-label"></label>
-                        <input asp-for="Moisture" class="form-control" />
-                        <span asp-validation-for="Moisture" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
                         <label asp-for="Humidity" class="control-label"></label>
                         <input asp-for="Humidity" class="form-control" />
                         <span asp-validation-for="Humidity" class="text-danger"></span>
@@ -35,9 +30,24 @@
                         <span asp-validation-for="Temperature" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Illumination" class="control-label"></label>
-                        <input asp-for="Illumination" class="form-control" />
-                        <span asp-validation-for="Illumination" class="text-danger"></span>
+                        <label asp-for="co2Concentration" class="control-label"></label>
+                        <input asp-for="co2Concentration" class="form-control" />
+                        <span asp-validation-for="co2Concentration" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="coConcentration" class="control-label"></label>
+                        <input asp-for="coConcentration" class="form-control" />
+                        <span asp-validation-for="coConcentration" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="lpgConcentration" class="control-label"></label>
+                        <input asp-for="lpgConcentration" class="form-control" />
+                        <span asp-validation-for="lpgConcentration" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="smokeConcentration" class="control-label"></label>
+                        <input asp-for="smokeConcentration" class="form-control" />
+                        <span asp-validation-for="smokeConcentration" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Создать" class="btn btn-primary" />

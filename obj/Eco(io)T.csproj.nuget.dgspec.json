@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "B:\\GitHub\\eco-iot-middleware\\Plan(io)T.csproj": {}
+    "B:\\GitHub\\eco-iot-middleware\\Eco(io)T.csproj": {}
   },
   "projects": {
-    "B:\\GitHub\\eco-iot-middleware\\Plan(io)T.csproj": {
+    "B:\\GitHub\\eco-iot-middleware\\Eco(io)T.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "B:\\GitHub\\eco-iot-middleware\\Plan(io)T.csproj",
-        "projectName": "Plan(io)T",
-        "projectPath": "B:\\GitHub\\eco-iot-middleware\\Plan(io)T.csproj",
+        "projectUniqueName": "B:\\GitHub\\eco-iot-middleware\\Eco(io)T.csproj",
+        "projectName": "Eco(io)T",
+        "projectPath": "B:\\GitHub\\eco-iot-middleware\\Eco(io)T.csproj",
         "packagesPath": "C:\\Users\\r6a19\\.nuget\\packages\\",
         "outputPath": "B:\\GitHub\\eco-iot-middleware\\obj\\",
         "projectStyle": "PackageReference",

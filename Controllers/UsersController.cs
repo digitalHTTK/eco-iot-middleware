@@ -132,6 +132,11 @@ namespace Plan_io_T.Controllers {
             if (user != null) {
                 user.Role = "user";
                 IdentityResult result = await _userManager.AddToRoleAsync(user, "user");
+                if (!result.Succeeded) {
+                    foreach (var error in result.Errors) {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
             }
             return RedirectToAction("Index");
         }

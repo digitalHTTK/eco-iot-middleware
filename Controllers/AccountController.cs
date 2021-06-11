@@ -8,10 +8,12 @@ namespace Plan_io_T.Controllers {
     public class AccountController : Controller {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager) {
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager) {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
         [HttpGet]
@@ -30,8 +32,14 @@ namespace Plan_io_T.Controllers {
                     ReqText = model.ReqText,
                     Role = "none"
                 };
+                var result = await _userManager.AddToRoleAsync(user, "none");
+                if (!result.Succeeded) {
+                    foreach (var error in result.Errors) {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
                 // Добавляем пользователя
-                var result = await _userManager.CreateAsync(user, model.Password);
+                result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded) {
                     // Установка куки (в работе не особо желательно, ибо роли)
                     //await _signInManager.SignInAsync(user, false);
@@ -43,6 +51,83 @@ namespace Plan_io_T.Controllers {
                 }
             }
             return View(model);
+        }
+
+        // Для создания усеров по умолчанию в базу данных
+        [HttpPost]
+        public async Task<IActionResult> CreateDefaultUsers() {
+            User defaultAdmin = new User {
+                Email = "r6a1999@gmail.com",
+                UserName = "digitalHTTK",
+                Name = "Grigoriy",
+                Surname = "Rogov",
+                ReqText = "-",
+                Role = "admin"
+            };
+            User defaultUser = new User {
+                Email = "classic@gmail.com",
+                UserName = "def",
+                Name = "Di",
+                Surname = "Fence",
+                ReqText = "I'm default user",
+                Role = "user"
+            };
+
+            var result = await _userManager.CreateAsync(defaultAdmin, "123q456w");
+            if (!result.Succeeded) {
+                foreach (var error in result.Errors) {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            result = await _userManager.CreateAsync(defaultUser, "abc123");
+            if (!result.Succeeded) {
+                foreach (var error in result.Errors) {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            result = await _userManager.AddToRoleAsync(defaultAdmin, "admin");
+            if (!result.Succeeded) {
+                foreach (var error in result.Errors) {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            result = await _userManager.AddToRoleAsync(defaultUser, "user");
+            if (!result.Succeeded) {
+                foreach (var error in result.Errors) {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        // Для ролей те же грабли
+        [HttpPost]
+        public async Task<IActionResult> CreateRoles() {
+            IdentityRole role1 = new IdentityRole { Name = "admin" };
+            IdentityRole role2 = new IdentityRole { Name = "user" };
+            IdentityRole role3 = new IdentityRole { Name = "none" };
+
+            var result = await _roleManager.CreateAsync(role1);
+            if (!result.Succeeded) {
+                foreach (var error in result.Errors) {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            result = await _roleManager.CreateAsync(role2);
+            if (!result.Succeeded) {
+                foreach (var error in result.Errors) {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            result = await _roleManager.CreateAsync(role3);
+            if (!result.Succeeded) {
+                foreach (var error in result.Errors) {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
