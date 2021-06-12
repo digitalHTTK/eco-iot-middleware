@@ -8,9 +8,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Plan_io_T.Data;
 using Microsoft.Extensions.DependencyInjection;
+using MQTTnet;
+using MQTTnet.Server;
 
 namespace Plan_io_T {
     public class Program {
+
         public static void Main(string[] args) {
             var host = CreateHostBuilder(args).Build();
             CreateDbIfNotExists(host);

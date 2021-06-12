@@ -927,6 +927,27 @@
           }
         }
       },
+      "MQTTnet/3.0.15": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.1/MQTTnet.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/MQTTnet.dll": {}
+        }
+      },
+      "MQTTnet.AspNetCore/3.0.15": {
+        "type": "package",
+        "dependencies": {
+          "MQTTnet": "3.0.15"
+        },
+        "compile": {
+          "lib/netcoreapp3.1/MQTTnet.AspNetCore.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/MQTTnet.AspNetCore.dll": {}
+        }
+      },
       "NETStandard.Library/1.6.1": {
         "type": "package",
         "dependencies": {
@@ -4418,6 +4439,52 @@
         "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.xml",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "MQTTnet/3.0.15": {
+      "sha512": "It8ZtqJdFXQNQabV1ZaOgtlWyk922/uFLChq2EgIDypd5zUIE8z72O10k0gYM4Zq9LLYl34Ex0kcu0uxu+PA+g==",
+      "type": "package",
+      "path": "mqttnet/3.0.15",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "images/Logo_128x128.png",
+        "lib/net452/MQTTnet.dll",
+        "lib/net461/MQTTnet.dll",
+        "lib/net5.0/MQTTnet.deps.json",
+        "lib/net5.0/MQTTnet.dll",
+        "lib/netcoreapp3.1/MQTTnet.deps.json",
+        "lib/netcoreapp3.1/MQTTnet.dll",
+        "lib/netstandard1.3/MQTTnet.deps.json",
+        "lib/netstandard1.3/MQTTnet.dll",
+        "lib/netstandard2.0/MQTTnet.deps.json",
+        "lib/netstandard2.0/MQTTnet.dll",
+        "lib/netstandard2.1/MQTTnet.deps.json",
+        "lib/netstandard2.1/MQTTnet.dll",
+        "lib/uap10.0/MQTTnet.dll",
+        "lib/uap10.0/MQTTnet.pri",
+        "mqttnet.3.0.15.nupkg.sha512",
+        "mqttnet.nuspec"
+      ]
+    },
+    "MQTTnet.AspNetCore/3.0.15": {
+      "sha512": "8ONuum4ewjfNsotPFXUs26dZp4e0Per6+M9MGWuy/bW624c2wmNSqFCGvLB4Ib4421Mt9ccqbZzSrRzAmlSjtg==",
+      "type": "package",
+      "path": "mqttnet.aspnetcore/3.0.15",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "images/Logo_128x128.png",
+        "lib/net5.0/MQTTnet.AspNetCore.deps.json",
+        "lib/net5.0/MQTTnet.AspNetCore.dll",
+        "lib/netcoreapp3.1/MQTTnet.AspNetCore.deps.json",
+        "lib/netcoreapp3.1/MQTTnet.AspNetCore.dll",
+        "lib/netstandard2.0/MQTTnet.AspNetCore.deps.json",
+        "lib/netstandard2.0/MQTTnet.AspNetCore.dll",
+        "mqttnet.aspnetcore.3.0.15.nupkg.sha512",
+        "mqttnet.aspnetcore.nuspec"
       ]
     },
     "NETStandard.Library/1.6.1": {
@@ -9168,6 +9235,8 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
+      "MQTTnet >= 3.0.15",
+      "MQTTnet.AspNetCore >= 3.0.15",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 3.1.10",
       "Microsoft.EntityFrameworkCore.SqlServer >= 3.1.10",
       "Microsoft.EntityFrameworkCore.Sqlite >= 3.1.10",
@@ -9223,6 +9292,14 @@
       "netcoreapp3.1": {
         "targetAlias": "netcoreapp3.1",
         "dependencies": {
+          "MQTTnet": {
+            "target": "Package",
+            "version": "[3.0.15, )"
+          },
+          "MQTTnet.AspNetCore": {
+            "target": "Package",
+            "version": "[3.0.15, )"
+          },
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
             "target": "Package",
             "version": "[3.1.10, )"

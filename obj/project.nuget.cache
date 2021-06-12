@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "8HoJrMQfp7qbYjKzQ7amONXRqc73PNrfadlRTcRYfFtEAyhE6zFT4GC7Y/1W5sas+aCHJDh78a2xpufqkggGmQ==",
+  "dgSpecHash": "cao1MqRapQu/tZOC6Pu9opb2nnc8tSLOY1Rx0NGLNLj9fN65HlbqVfEOTMMoaCC9XRNvBrA+h3zTYKBc6LCfXA==",
   "success": true,
   "projectFilePath": "B:\\GitHub\\eco-iot-middleware\\Plan(io)T.csproj",
   "expectedPackageFiles": [
@@ -64,6 +64,8 @@
     "C:\\Users\\r6a19\\.nuget\\packages\\microsoft.visualstudio.web.codegenerators.mvc\\3.1.4\\microsoft.visualstudio.web.codegenerators.mvc.3.1.4.nupkg.sha512",
     "C:\\Users\\r6a19\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\r6a19\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
+    "C:\\Users\\r6a19\\.nuget\\packages\\mqttnet\\3.0.15\\mqttnet.3.0.15.nupkg.sha512",
+    "C:\\Users\\r6a19\\.nuget\\packages\\mqttnet.aspnetcore\\3.0.15\\mqttnet.aspnetcore.3.0.15.nupkg.sha512",
     "C:\\Users\\r6a19\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Users\\r6a19\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
     "C:\\Users\\r6a19\\.nuget\\packages\\nuget.frameworks\\4.7.0\\nuget.frameworks.4.7.0.nupkg.sha512",

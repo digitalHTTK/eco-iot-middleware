@@ -13,9 +13,12 @@ namespace Plan_io_T.Data {
                 return;   
             }
 
+            DateTime dateTime = DateTime.Now;
             var aData = new ArduinoData[]
             {
             new ArduinoData {
+                Date = dateTime.ToString("dd-MM-yyyy"),
+                Time = dateTime.ToString("HH:mm:ss"),
                 Temperature = 0,
                 Humidity = 0,
                 co2Concentration = 0,
@@ -24,6 +27,8 @@ namespace Plan_io_T.Data {
                 lpgConcentration = 0
             },
             new ArduinoData {
+                Date = dateTime.ToString("dd-MM-yyyy"),
+                Time = dateTime.ToString("HH:mm:ss"),
                 Temperature = 1,
                 Humidity = 1,
                 co2Concentration = 1,
@@ -32,6 +37,8 @@ namespace Plan_io_T.Data {
                 lpgConcentration = 1
             },
             new ArduinoData {
+                Date = dateTime.ToString("dd-MM-yyyy"),
+                Time = dateTime.ToString("HH:mm:ss"),
                 Temperature = 2,
                 Humidity = 2,
                 co2Concentration = 2,

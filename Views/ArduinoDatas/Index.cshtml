@@ -27,6 +27,12 @@
             <thead>
                 <tr>
                     <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Time)
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.Humidity)
                     </th>
                     <th>
@@ -51,6 +57,12 @@
                 @foreach (var item in Model) {
                 <tr>
                     <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.Humidity)
                     </td>
                     <td>
@@ -66,7 +78,7 @@
                         @Html.DisplayFor(modelItem => item.lpgConcentration)
                     </td>
                     <th>
-                        @Html.DisplayNameFor(model => model.smokeConcentration)
+                        @Html.DisplayFor(modelItem => item.smokeConcentration)
                     </th>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.ID">Ред.</a> |

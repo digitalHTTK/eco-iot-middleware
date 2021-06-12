@@ -140,16 +140,16 @@ namespace Plan_io_T.Controllers {
         }
 
         public async Task<IActionResult> Dashboard() {
-            //var temp = await _context.ArduinoData.OrderByDescending(p => p.ID).FirstOrDefaultAsync();
-            //ViewData["Time"] = DateTime.Now.ToString("HH:mm tt");
-            //ViewData["Humidity"] = temp.Humidity;
-            //ViewData["co2Concentration"] = temp.co2Concentration;
-            //ViewData["Temperature"] = temp.Temperature;
-            ////if (temp.Temperature < 10 || temp.Humidity < 20 || temp.Moisture < 20 || temp.Illumination < 20) ViewData["Score"] = "1";
-            ////else if (temp.Temperature < 14 || temp.Humidity < 40 || temp.Moisture < 40 || temp.Illumination < 40) ViewData["Score"] = "2";
-            ////else if (temp.Temperature < 16 || temp.Humidity < 60 || temp.Moisture < 60 || temp.Illumination < 60) ViewData["Score"] = "3";
-            ////else if (temp.Temperature < 20 || temp.Humidity < 80 || temp.Moisture < 80 || temp.Illumination < 80) ViewData["Score"] = "4";
-            ////else ViewData["Score"] = "5";
+            var temp = await _context.ArduinoData.OrderByDescending(p => p.ID).FirstOrDefaultAsync();
+            ViewData["Time"] = DateTime.Now.ToString("HH:mm tt");
+            ViewData["Humidity"] = temp.Humidity;
+            ViewData["co2Concentration"] = temp.co2Concentration;
+            ViewData["Temperature"] = temp.Temperature;
+            if (temp.Temperature < 10 || temp.Humidity < 20) ViewData["Score"] = "1";
+            else if (temp.Temperature < 14 || temp.Humidity < 40) ViewData["Score"] = "2";
+            else if (temp.Temperature < 16 || temp.Humidity < 60) ViewData["Score"] = "3";
+            else if (temp.Temperature < 20 || temp.Humidity < 80) ViewData["Score"] = "4";
+            else ViewData["Score"] = "5";
             return View();
         }
 

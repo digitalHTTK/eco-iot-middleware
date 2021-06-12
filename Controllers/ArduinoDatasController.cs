@@ -52,10 +52,13 @@ namespace Plan_io_T.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Temperature,Humidity,CO,CO2,LPG,Smoke")] ArduinoData arduinoData)
+        public async Task<IActionResult> Create([Bind("ID,Temperature,Humidity,co2Concentration,coConcentration,lpgConcentration,smokeConcentration")] ArduinoData arduinoData)
         {
             if (ModelState.IsValid)
             {
+                DateTime dateTime = DateTime.Now;
+                arduinoData.Date = dateTime.ToString("dd-MM-yyyy");
+                arduinoData.Time = dateTime.ToString("HH:mm:ss");
                 _context.Add(arduinoData);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -80,7 +83,7 @@ namespace Plan_io_T.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Temperature,Humidity,CO,CO2,LPG,Smoke")] ArduinoData arduinoData)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Temperature,Humidity,co2Concentration,coConcentration,lpgConcentration,smokeConcentration")] ArduinoData arduinoData)
         {
             if (id != arduinoData.ID)
             {

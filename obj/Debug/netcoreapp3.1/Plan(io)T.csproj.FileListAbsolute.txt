@@ -406,3 +406,5 @@ B:\GitHub\eco-iot-middleware\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp
 B:\GitHub\eco-iot-middleware\obj\Debug\netcoreapp3.1\Plan(io)T.Views.pdb
 B:\GitHub\eco-iot-middleware\obj\Debug\netcoreapp3.1\Plan(io)T.csproj.CopyComplete
 B:\GitHub\eco-iot-middleware\obj\Debug\netcoreapp3.1\Plan(io)T.genruntimeconfig.cache
+B:\GitHub\eco-iot-middleware\bin\Debug\netcoreapp3.1\MQTTnet.dll
+B:\GitHub\eco-iot-middleware\bin\Debug\netcoreapp3.1\MQTTnet.AspNetCore.dll
