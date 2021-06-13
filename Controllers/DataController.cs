@@ -11,7 +11,12 @@ using System.Threading.Tasks;
 using Plan_io_T.Library;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-
+using MQTTnet;
+using MQTTnet.Client.Options;
+using System.Threading;
+using MQTTnet.Client;
+using System.Text;
+using MQTTnet.Protocol;
 
 namespace Plan_io_T.Controllers {
     [Authorize(Roles = "admin, user")]
@@ -20,6 +25,10 @@ namespace Plan_io_T.Controllers {
         private readonly MvcDataContext _context;
         private SerialPortConnector _serialPortConnector;
         static private string jsonString = "init";
+        static private MqttFactory factory;
+        static private IMqttClient mqttClient;
+        static private bool isMqttConnected = false;
+        static private ArduinoData aData;
 
         public DataController(MvcDataContext context) {
             _context = context;
@@ -49,24 +58,11 @@ namespace Plan_io_T.Controllers {
         public async Task<IActionResult> NewRecord() {
             try {
                 if (ModelState.IsValid) {
-
-                    int[] mas = new int[5];
-                    mas = await Task.Run(() => GetDataFromEmulator());
-
-                    ArduinoData aData = new ArduinoData {
-                        Humidity     = mas[0],
-                        Temperature = mas[1],
-                        co2Concentration = mas[2],
-                        coConcentration = mas[3],
-                        lpgConcentration = mas[4]
-                    };
                     _context.ArduinoData.Add(aData);
-                    jsonString = JsonSerializer.Serialize(aData);
                     await _context.SaveChangesAsync();
                 }
                 return Ok("success");
-            }
-            catch (Exception) {
+            } catch (Exception) {
                 return BadRequest("failed");
             }
         }
@@ -86,16 +82,14 @@ namespace Plan_io_T.Controllers {
         public async Task<IActionResult> System(string _device) {
             try {
                 if (_device == "arduino") {
-                    ViewData["ArduinoEcho"] = await Task.Run(() => GetEchoAnswer("A"));
-                }
-                else if (_device == "sensors") {
-                    ViewData["SensorsEcho"]  = await Task.Run(() => GetEchoAnswer("M"));
+                    ViewData["ArduinoEcho"] = await Task.Run(() => GetEchoAnswer("M"));
+                } else if (_device == "sensors") {
+                    ViewData["SensorsEcho"] = await Task.Run(() => GetEchoAnswer("M"));
                     ViewData["SensorsEcho"] += await Task.Run(() => GetEchoAnswer("H"));
                     ViewData["SensorsEcho"] += await Task.Run(() => GetEchoAnswer("T"));
                     ViewData["SensorsEcho"] += await Task.Run(() => GetEchoAnswer("L"));
-                } 
-                else if (_device == "relay") {
-                    ViewData["RelayEcho"]  = await Task.Run(() => GetEchoAnswer("R"));
+                } else if (_device == "relay") {
+                    ViewData["RelayEcho"] = await Task.Run(() => GetEchoAnswer("R"));
                     ViewData["RelayEcho"] += await Task.Run(() => GetEchoAnswer("Z"));
                 }
                 return View();
@@ -119,27 +113,119 @@ namespace Plan_io_T.Controllers {
             int[] _mas = new int[4];
             if (_h == "CLOSED" || _h == "BAD") {
                 throw new Exception("Error: Port closed or something going wrong during the process.");
-            }
-            else {
+            } else {
                 _mas[0] = int.Parse(_h);
                 _mas[1] = int.Parse(_m);
                 _mas[2] = int.Parse(_t);
                 _mas[3] = int.Parse(_l);
             }
-            
+
             return _mas;
         }
 
         private string GetEchoAnswer(string _deviceID) {
-            _serialPortConnector.Send("E" + _deviceID);
-            string temp = _serialPortConnector.Get();
-            if (temp == "CLOSED" || temp == "BAD") {
-                throw new Exception("Error: Port closed or something going wrong during the process.");
-            }
+            string temp = "Ok";
+            SendMQTT("OK?");
             return temp;
         }
 
+        public static async Task SubscribeAsync(string topic, int qos = 1) =>
+            await mqttClient.SubscribeAsync(new TopicFilterBuilder()
+                .WithTopic(topic)
+                .WithQualityOfServiceLevel((MQTTnet.Protocol.MqttQualityOfServiceLevel)qos)
+                .Build());
+
+        private async void SetMQTT() {
+            factory = new MqttFactory();
+            mqttClient = factory.CreateMqttClient();
+
+            var options = new MqttClientOptionsBuilder()
+                .WithTcpServer("127.0.0.1", 1883)
+                .Build();
+
+            mqttClient.UseConnectedHandler(e => {
+                isMqttConnected = true;
+                Console.WriteLine("Connected successfully with MQTT Broker.");
+            });
+
+            mqttClient.UseDisconnectedHandler(e => {
+                isMqttConnected = false;
+                Console.WriteLine("Disconnected from MQTT Broker.");
+            });
+
+            mqttClient.UseApplicationMessageReceivedHandler(e => {
+                try {
+                    string topic = e.ApplicationMessage.Topic;
+
+                    if (string.IsNullOrWhiteSpace(topic) == false) {
+                        string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                        Console.WriteLine($"Topic: {topic}. Message Received: {payload}");
+                        PushDataFromNodes(payload);
+                    }
+                } catch (Exception ex) {
+                    Console.WriteLine(ex.Message, ex);
+                }
+            });
+
+            await mqttClient.ConnectAsync(options, CancellationToken.None);
+
+            await SubscribeAsync("ecoiot/from/+");
+
+            var message = new MqttApplicationMessageBuilder()
+                .WithTopic("ecoiot/to")
+                .WithPayload("READY")
+                .WithExactlyOnceQoS()
+                .WithRetainFlag()
+                .Build();
+
+            await mqttClient.PublishAsync(message, CancellationToken.None);
+        }
+
+        [HttpPost]
+        private async void PushDataFromNodes(string msg) {
+            var optionsBuilder = new DbContextOptionsBuilder<MvcDataContext>();
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=MvcDataContext;Trusted_Connection=True;MultipleActiveResultSets=true");
+
+            using (var dataContext = new MvcDataContext(optionsBuilder.Options)) {
+                ArduinoDataWithPOCOs data = JsonSerializer.Deserialize<ArduinoDataWithPOCOs>(msg);
+                DateTime dateTime = DateTime.Now;
+                ArduinoData arduinoData = new ArduinoData {
+                    Date = dateTime.ToString("dd.MM.yyyy"),
+                    Time = dateTime.ToString("HH:mm:ss"),
+                    NodeID = data.NodeNum,
+                    Temperature = data.temp,
+                    Humidity = data.hum,
+                    co2Concentration = data.co2,
+                    coConcentration = data.co,
+                    smokeConcentration = data.smk,
+                    lpgConcentration = data.lpg
+                };
+                aData = arduinoData;
+                try {
+                    if (ModelState.IsValid) {
+                        dataContext.ArduinoData.Add(arduinoData);
+                        await dataContext.SaveChangesAsync();
+                    }
+                } catch (Exception err) {
+                    Console.WriteLine(err.Message);
+                }
+            }
+        }
+
+        [HttpPost]
+        private async void SendMQTT(string msg) {
+            var message = new MqttApplicationMessageBuilder()
+                .WithTopic("ecoiot/to")
+                .WithPayload(msg)
+                .WithExactlyOnceQoS()
+                .WithRetainFlag()
+                .Build();
+
+            await mqttClient.PublishAsync(message, CancellationToken.None);
+        }
+
         public async Task<IActionResult> Dashboard() {
+            if (!isMqttConnected) SetMQTT();
             var temp = await _context.ArduinoData.OrderByDescending(p => p.ID).FirstOrDefaultAsync();
             ViewData["Time"] = DateTime.Now.ToString("HH:mm tt");
             ViewData["Humidity"] = temp.Humidity;
@@ -156,5 +242,7 @@ namespace Plan_io_T.Controllers {
         public IActionResult System() {
             return View();
         }
+
+
     }
 }

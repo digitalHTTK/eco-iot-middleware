@@ -142,7 +142,6 @@ namespace Plan_io_T.Controllers {
                 var result =
                     await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded) {
-                    // Проверяем, принадлежит ли URL приложению
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl)) {
                         return Redirect(model.ReturnUrl);
                     } else {

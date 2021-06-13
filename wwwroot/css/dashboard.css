@@ -35,7 +35,7 @@ header {
 }
 
 .page__header-logo, .page__header-logo-2 {
-    color: #00926B;
+    color: #489BE9;
     font-size: 36px;
     font-weight: 500;
 }
@@ -72,7 +72,7 @@ header {
     display: inline-block;
     position: relative;
     text-decoration: none;
-    color: #00926B;
+    color: #489BE9;
 }
 
     .page__header-cur::before {
@@ -82,7 +82,7 @@ header {
         height: 2px;
         width: 40%;
         left: 30%;
-        background-color: #00926B;
+        background-color: #489BE9;
         top: 34px;
     }
 
@@ -254,7 +254,7 @@ header {
     min-width: 80px;
     min-height: 80px;
     border-radius: 80px;
-    border: 4px solid #00926B;
+    border: 4px solid #489BE9;
     font-weight: 400;
     text-align: center;
 }
@@ -331,7 +331,7 @@ header {
     padding: 10px 0px;
     text-align: center;
     height: max-content;
-    border: 4px solid #00926B;
+    border: 4px solid #489BE9;
     border-radius: 16px;
     color: black;
     background: none;
@@ -398,7 +398,7 @@ form > button, form > div > button {
     padding: 10px 0px;
     text-align: center;
     height: max-content;
-    border: 4px solid #00926B;
+    border: 4px solid #489BE9;
     border-radius: 16px;
     color: black;
     background: none;
@@ -463,7 +463,7 @@ form > button:hover {
         min-width: 60px;
         min-height: 60px;
         border-radius: 60px;
-        border: 3px solid #00926B;
+        border: 3px solid #489BE9;
     }
 
     .page__main-card-rating-text > h1 {
@@ -517,7 +517,7 @@ form > button:hover {
     }
 
     form > button, form > div > button {
-        border: 3px solid #00926B;
+        border: 3px solid #489BE9;
         font-size: 18px;
         height: 42px;
     }
@@ -649,7 +649,7 @@ form > button:hover {
         min-width: 60px;
         min-height: 60px;
         border-radius: 60px;
-        border: 3px solid #00926B;
+        border: 3px solid #489BE9;
     }
 
     .page__main-card-rating-text > h1 {
@@ -703,7 +703,7 @@ form > button:hover {
     }
 
     form > button, form > div > button {
-        border: 3px solid #00926B;
+        border: 3px solid #489BE9;
         font-size: 18px;
         height: 42px;
     }

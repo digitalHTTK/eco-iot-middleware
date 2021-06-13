@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Plan_io_T.Models.ArduinoData>
+﻿@using Plan_io_T.Models
+@model DataIndexViewModel
 
 @{
     ViewData["Title"] = "Вывод данных";
@@ -23,7 +24,124 @@
             <a asp-controller="Data" asp-action="Dashboard">Назад к панели управления</a>
         </p>
 
+        <form method="get">
+            <div class="form-inline">
+                <label>Имя: </label>
+                <input name="nodeId" value="@Model.DataFilterViewModel.SelectedNodeId" class="form-control" />
+
+                <label>Компания: </label>
+                <select name="date" value="@Model.DataFilterViewModel.SelectedDate" class="form-control"></select>
+
+                <input type="submit" value="Фильтр" class="btn btn-outline-dark" />
+            </div>
+        </form>
+
         <table class="table">
+            <tr>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@(Model.DataSortViewModel.IdSort)"
+                       asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
+                       asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)">ID</a>
+                </th>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@(Model.DataSortViewModel.DateSort)"
+                       asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
+                       asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)">Date</a>
+                </th>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@(Model.DataSortViewModel.TimeSort)"
+                       asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
+                       asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)">Time</a>
+                </th>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@(Model.DataSortViewModel.NodeIdSort)"
+                       asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
+                       asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)">NodeID</a>
+                </th>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@(Model.DataSortViewModel.TempSort)"
+                       asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
+                       asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)">Temp</a>
+                </th>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@(Model.DataSortViewModel.HumSort)"
+                       asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
+                       asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)">Humidity</a>
+                </th>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@(Model.DataSortViewModel.CoSort)"
+                       asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
+                       asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)">CO</a>
+                </th>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@(Model.DataSortViewModel.Co2Sort)"
+                       asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
+                       asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)">CO2</a>
+                </th>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@(Model.DataSortViewModel.LpgSort)"
+                       asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
+                       asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)">LPG</a>
+                </th>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@(Model.DataSortViewModel.SmkSort)"
+                       asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
+                       asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)">Smoke</a>
+                </th>
+            </tr>
+            @foreach (ArduinoData a in Model.ArduinoDatas) {
+                <tr><td>@a.ID</td>
+                <td>@a.Date</td>
+                <td>@a.Time</td>
+                <td>@a.NodeID</td>
+                <td>@a.Temperature</td>
+                <td>@a.Humidity</td>
+                <td>@a.coConcentration</td>
+                <td>@a.co2Concentration</td>
+                <td>@a.lpgConcentration</td>
+                <td>@a.smokeConcentration</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@a.ID">Ред.</a> |
+                    <a asp-action="Details" asp-route-id="@a.ID">Подробно</a> |
+                    <a asp-action="Delete" asp-route-id="@a.ID">Удалить</a>
+                </td>
+            </tr>
+            }
+        </table>
+        @if (Model.DataPageViewModel.HasPreviousPage) {
+            <a asp-action="Index"
+               asp-route-page="@(Model.DataPageViewModel.PageNumber - 1)"
+               asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
+               asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)"
+               asp-route-sortorder="@(Model.DataSortViewModel.Current)"
+               class="btn  btn-outline-dark">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+                Назад
+            </a>
+        }
+        @if (Model.DataPageViewModel.HasNextPage) {
+            <a asp-action="Index"
+               asp-route-page="@(Model.DataPageViewModel.PageNumber + 1)"
+               asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
+               asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)"
+               asp-route-sortorder="@(Model.DataSortViewModel.Current)"
+               class="btn btn-outline-dark">
+                Вперед
+                <i class="glyphicon glyphicon-chevron-right"></i>
+            </a>
+        }
+
+        @*<table class="table">
             <thead>
                 <tr>
                     <th>
@@ -31,6 +149,9 @@
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Time)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NodeID)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Humidity)
@@ -55,40 +176,43 @@
             </thead>
             <tbody>
                 @foreach (var item in Model) {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Time)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Humidity)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Temperature)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.co2Concentration)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.coConcentration)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.lpgConcentration)
-                    </td>
-                    <th>
-                        @Html.DisplayFor(modelItem => item.smokeConcentration)
-                    </th>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID">Ред.</a> |
-                        <a asp-action="Details" asp-route-id="@item.ID">Подробно</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ID">Удалить</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Time)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Humidity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NodeID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Temperature)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.co2Concentration)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.coConcentration)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.lpgConcentration)
+                        </td>
+                        <th>
+                            @Html.DisplayFor(modelItem => item.smokeConcentration)
+                        </th>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ID">Ред.</a> |
+                            <a asp-action="Details" asp-route-id="@item.ID">Подробно</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ID">Удалить</a>
+                        </td>
+                    </tr>
                 }
             </tbody>
-        </table>
+        </table>*@
     </main>
 </div>
 

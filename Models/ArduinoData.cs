@@ -15,6 +15,8 @@ namespace Plan_io_T.Models {
 
         public string Time { get; set; }
 
+        public int NodeID { get; set; }
+
         public int Humidity { get; set; }
 
         public int Temperature { get; set; }
