@@ -98,6 +98,7 @@
                        asp-route-date="@(Model.DataFilterViewModel.SelectedDate)"
                        asp-route-id="@(Model.DataFilterViewModel.SelectedNodeId)">Smoke</a>
                 </th>
+                <th>Действия</th>
             </tr>
             @foreach (ArduinoData a in Model.ArduinoDatas) {
                 <tr><td>@a.ID</td>

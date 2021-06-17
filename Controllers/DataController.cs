@@ -24,7 +24,6 @@ namespace Plan_io_T.Controllers {
 
         private readonly MvcDataContext _context;
         private SerialPortConnector _serialPortConnector;
-        static private string jsonString = "init";
         static private MqttFactory factory;
         static private IMqttClient mqttClient;
         static private bool isMqttConnected = false;
@@ -69,6 +68,135 @@ namespace Plan_io_T.Controllers {
 
         [HttpGet("Data/SendDataToFront")]
         public string SendDataToFront() {
+            string jsonString = "a";
+
+            return jsonString;
+        }
+
+        [HttpGet("Data/InitDataToCharts")]
+        public string InitDataToCharts() {
+            string jsonString;
+            var items1 = _context.ArduinoData.Where(p => p.NodeID == 1).OrderByDescending(p => p.ID).Take(8);
+            var items2 = _context.ArduinoData.Where(p => p.NodeID == 2).OrderByDescending(p => p.ID).Take(8);
+            var items3 = _context.ArduinoData.Where(p => p.NodeID == 3).OrderByDescending(p => p.ID).Take(8);
+
+            List<NodesThatContainsDataLists> nodesDataList = new List<NodesThatContainsDataLists>();
+            List<ArduinoDataWithPOCOs> node1DataList = new List<ArduinoDataWithPOCOs>();
+            List<ArduinoDataWithPOCOs> node2DataList = new List<ArduinoDataWithPOCOs>();
+            List<ArduinoDataWithPOCOs> node3DataList = new List<ArduinoDataWithPOCOs>();
+            foreach (var item in items1) {
+                node1DataList.Add(new ArduinoDataWithPOCOs {
+                    temp = item.Temperature,
+                    hum = item.Humidity,
+                    co = item.coConcentration,
+                    co2 = item.co2Concentration,
+                    lpg = item.lpgConcentration,
+                    smk = item.smokeConcentration
+                });
+            }
+            foreach (var item in items2) {
+                node2DataList.Add(new ArduinoDataWithPOCOs {
+                    temp = item.Temperature,
+                    hum = item.Humidity,
+                    co = item.coConcentration,
+                    co2 = item.co2Concentration,
+                    lpg = item.lpgConcentration,
+                    smk = item.smokeConcentration
+                });
+            }
+            foreach (var item in items3) {
+                node3DataList.Add(new ArduinoDataWithPOCOs {
+                    temp = item.Temperature,
+                    hum = item.Humidity,
+                    co = item.coConcentration,
+                    co2 = item.co2Concentration,
+                    lpg = item.lpgConcentration,
+                    smk = item.smokeConcentration
+                });
+            }
+
+            DateTime dateTime = DateTime.Now;
+            NodesThatContainsDataLists node1 = new NodesThatContainsDataLists {
+                nodeId = 1,
+                time = dateTime.ToString("HH:mm"),
+                nodeData = node1DataList
+            };
+            NodesThatContainsDataLists node2 = new NodesThatContainsDataLists {
+                nodeId = 2,
+                time = dateTime.ToString("HH:mm"),
+                nodeData = node2DataList
+            };
+            NodesThatContainsDataLists node3 = new NodesThatContainsDataLists {
+                nodeId = 3,
+                time = dateTime.ToString("HH:mm"),
+                nodeData = node3DataList
+            };
+
+            nodesDataList.Add(node1);
+            nodesDataList.Add(node2);
+            nodesDataList.Add(node3);
+
+            jsonString = JsonSerializer.Serialize(nodesDataList);
+
+            return jsonString;
+        }
+
+        [HttpGet("Data/SendDataToCharts")]
+        public string SendDataToCharts() {
+            string jsonString;
+            var item1 = _context.ArduinoData.Where(p => p.NodeID == 1).OrderByDescending(p => p.ID).FirstOrDefault();
+            var item2 = _context.ArduinoData.Where(p => p.NodeID == 2).OrderByDescending(p => p.ID).FirstOrDefault();
+            var item3 = _context.ArduinoData.Where(p => p.NodeID == 3).OrderByDescending(p => p.ID).FirstOrDefault();
+
+            List<NodesThatContainsData> nodesDataList = new List<NodesThatContainsData>();
+            ArduinoDataWithPOCOs node1Data = new ArduinoDataWithPOCOs{
+                temp = item1.Temperature,
+                hum = item1.Humidity,
+                co = item1.coConcentration,
+                co2 = item1.co2Concentration,
+                lpg = item1.lpgConcentration,
+                smk = item1.smokeConcentration
+            };
+            ArduinoDataWithPOCOs node2Data = new ArduinoDataWithPOCOs{
+                temp = item2.Temperature,
+                hum = item2.Humidity,
+                co = item2.coConcentration,
+                co2 = item2.co2Concentration,
+                lpg = item2.lpgConcentration,
+                smk = item2.smokeConcentration
+            };
+            ArduinoDataWithPOCOs node3Data = new ArduinoDataWithPOCOs{
+                temp = item3.Temperature,
+                hum = item3.Humidity,
+                co = item3.coConcentration,
+                co2 = item3.co2Concentration,
+                lpg = item3.lpgConcentration,
+                smk = item3.smokeConcentration
+            };
+
+            DateTime dateTime = DateTime.Now;
+            NodesThatContainsData node1 = new NodesThatContainsData {
+                nodeId = 1,
+                time = dateTime.ToString("HH:mm"),
+                nodeData = node1Data
+            };
+            NodesThatContainsData node2 = new NodesThatContainsData {
+                nodeId = 2,
+                time = dateTime.ToString("HH:mm"),
+                nodeData = node2Data
+            };
+            NodesThatContainsData node3 = new NodesThatContainsData {
+                nodeId = 3,
+                time = dateTime.ToString("HH:mm"),
+                nodeData = node3Data
+            };
+
+            nodesDataList.Add(node1);
+            nodesDataList.Add(node2);
+            nodesDataList.Add(node3);
+
+            jsonString = JsonSerializer.Serialize(nodesDataList);
+
             return jsonString;
         }
 
@@ -169,7 +297,7 @@ namespace Plan_io_T.Controllers {
 
             await mqttClient.ConnectAsync(options, CancellationToken.None);
 
-            await SubscribeAsync("ecoiot/from/+");
+            await SubscribeAsync("ecoiot/from/system");
 
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic("ecoiot/to")

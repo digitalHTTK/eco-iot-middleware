@@ -20,9 +20,9 @@
             @if (User.IsInRole("admin")) {
                 <a class="page__dropdown-out" asp-controller="Users" asp-action="Index">Войти в панель администрации</a>
             }
-        <form method="post" asp-controller="Account" asp-action="Logout">
-            <input class="page__out-button" type="submit" value="Выйти из аккаунта" />
-        </form>
+            <form method="post" asp-controller="Account" asp-action="Logout">
+                <input class="page__out-button" type="submit" value="Выйти из аккаунта" />
+            </form>
         </div>
         <div class="page__menu">
             @if (User.IsInRole("admin")) {
@@ -52,7 +52,7 @@
             <div class="page__main-card-rating">
                 <div class="page__main-card-rating-num">@ViewData["Score"]</div>
                 <div class="page__main-card-rating-text">
-                    <h1>Оценка условий жизни растения</h1>
+                    <h1>Оценка состояния окружающего воздуха</h1>
                     <div>На основе данных мониторинга</div>
                 </div>
             </div>
@@ -82,35 +82,48 @@
 
     <div class="page__small-card">
 
-        <div class="page__small-card-content-buttons">
-            <h1>Режим полива растений</h1>
-            <p>Выбор режима полива растений</p>
-            <form>
-                <div>
-                    <button class="relay_buttons" id="relay-on">Вкл.</button>
-                    <button class="relay_buttons page__button-checked" id="relay-off">Выкл.</button>
-                </div>
-            </form>
+        <div class="page__small-card-content">
+            <h1>Температура окружающего воздуха</h1>
+            <p>Период обновления - 10 секунд</p>
+            <canvas id="tempChart"></canvas>
         </div>
 
-        <div class="page__small-card-content-buttons">
+        <div class="page__small-card-content">
+            <h1>Влажность окружающего воздуха</h1>
+            <p>Период обновления - 10 секунд</p>
+            <canvas id="humChart"></canvas>
+        </div>
+
+        <div class="page__small-card-content">
+            <h1>Концентрация окиси углерода</h1>
+            <p>Период обновления - 10 секунд</p>
+            <canvas id="coChart"></canvas>
+        </div>
+
+        <div class="page__small-card-content">
+            <h1>Концентрация углекислого газа</h1>
+            <p>Период обновления - 10 секунд</p>
+            <canvas id="co2Chart"></canvas>
+        </div>
+
+        <div class="page__small-card-content">
+            <h1>Концентрация LPG</h1>
+            <p>Период обновления - 10 секунд</p>
+            <canvas id="lpgChart"></canvas>
+        </div>
+
+        <div class="page__small-card-content">
+            <h1>Концентрация дыма</h1>
+            <p>Период обновления - 10 секунд</p>
+            <canvas id="smkChart"></canvas>
+        </div>
+
+        <div class="page__small-card-content">
             <h1>Данные мониторинга</h1>
             <p>Таблица с данными мониторинга</p>
             <form>
                 <div>
-                    <button id="get-data">Получить</button>
                     <button asp-controller="ArduinoDatas" asp-action="Index">Перейти</button>
-                </div>
-            </form>
-        </div>
-
-        <div class="page__small-card-content-buttons">
-            <h1>Режим работы фитоламп</h1>
-            <p>Выбор режима работы фитоламп</p>
-            <form>
-                <div>
-                    <button class="bulb_buttons" id="bulb-on">Вкл.</button>
-                    <button class="bulb_buttons page__button-checked" id="bulb-off">Выкл.</button>
                 </div>
             </form>
         </div>
@@ -131,20 +144,287 @@
         </div>
     </div>
     <div class="footer__about">
-        <div>Plan(io)t, 2020</div>
+        <div>Eco(io)t, 2021</div>
     </div>
 </footer>
 
 
 @section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src="https://www.chartjs.org/samples/2.9.4/utils.js"></script>
     <script src="~/js/jQuery.js"></script>
     <script src="~/js/dropdown.js"></script>
     <script>
-        let buttons   = document.querySelectorAll(".relay_buttons");
+        let buttons = document.querySelectorAll(".relay_buttons");
         let buttons_2 = document.querySelectorAll(".bulb_buttons");
+
+        var ctx1 = document.getElementById('tempChart').getContext('2d');
+        var ctx2 = document.getElementById('humChart').getContext('2d');
+        var ctx3 = document.getElementById('coChart').getContext('2d');
+        var ctx4 = document.getElementById('co2Chart').getContext('2d');
+        var ctx5 = document.getElementById('lpgChart').getContext('2d');
+        var ctx6 = document.getElementById('smkChart').getContext('2d');
+
+        const labels1 = ["00:00", "00:00", "00:00", "00:00", "00:00",
+                         "00:00", "00:00", "00:00"];
+        const labels2 = ["00:00", "00:00", "00:00", "00:00", "00:00",
+                          "00:00", "00:00", "00:00"];
+        const labels3 = ["00:00", "00:00", "00:00", "00:00", "00:00",
+                          "00:00", "00:00", "00:00"];
+        const labels4 = ["00:00", "00:00", "00:00", "00:00", "00:00",
+                          "00:00", "00:00", "00:00"];
+        const labels5 = ["00:00", "00:00", "00:00", "00:00", "00:00",
+                          "00:00", "00:00", "00:00"];
+        const labels6 = ["00:00", "00:00", "00:00", "00:00", "00:00",
+                          "00:00", "00:00", "00:00"];
+
+        var tempChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: labels1,
+                datasets: [
+                    {
+                        label: 'Узел 1',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(72, 155, 233, 1)',
+                        backgroundColor: 'rgba(72, 155, 233, 0)',
+                    },
+                    {
+                        label: 'Узел 2',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(233, 120, 72, 1)',
+                        backgroundColor: 'rgba(233, 120, 72, 0)',
+                    },
+                    {
+                        label: 'Узел 3',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(236, 84, 122, 1)',
+                        backgroundColor: 'rgba(236, 84, 122, 0)',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            },
+        });
+        var humChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: labels2,
+                datasets: [
+                    {
+                        label: 'Узел 1',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(72, 155, 233, 1)',
+                        backgroundColor: 'rgba(72, 155, 233, 0)',
+                    },
+                    {
+                        label: 'Узел 2',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(233, 120, 72, 1)',
+                        backgroundColor: 'rgba(233, 120, 72, 0)',
+                    },
+                    {
+                        label: 'Узел 3',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(236, 84, 122, 1)',
+                        backgroundColor: 'rgba(236, 84, 122, 0)',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            },
+        });
+        var coChart = new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: labels3,
+                datasets: [
+                    {
+                        label: 'Узел 1',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(72, 155, 233, 1)',
+                        backgroundColor: 'rgba(72, 155, 233, 0)',
+                    },
+                    {
+                        label: 'Узел 2',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(233, 120, 72, 1)',
+                        backgroundColor: 'rgba(233, 120, 72, 0)',
+                    },
+                    {
+                        label: 'Узел 3',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(236, 84, 122, 1)',
+                        backgroundColor: 'rgba(236, 84, 122, 0)',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            },
+        });
+        var co2Chart = new Chart(ctx4, {
+            type: 'line',
+            data: {
+                labels: labels4,
+                datasets: [
+                    {
+                        label: 'Узел 1',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(72, 155, 233, 1)',
+                        backgroundColor: 'rgba(72, 155, 233, 0)',
+                    },
+                    {
+                        label: 'Узел 2',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(233, 120, 72, 1)',
+                        backgroundColor: 'rgba(233, 120, 72, 0)',
+                    },
+                    {
+                        label: 'Узел 3',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(236, 84, 122, 1)',
+                        backgroundColor: 'rgba(236, 84, 122, 0)',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            },
+        });
+        var lpgChart = new Chart(ctx5, {
+            type: 'line',
+            data: {
+                labels: labels5,
+                datasets: [
+                    {
+                        label: 'Узел 1',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(72, 155, 233, 1)',
+                        backgroundColor: 'rgba(72, 155, 233, 0)',
+                    },
+                    {
+                        label: 'Узел 2',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(233, 120, 72, 1)',
+                        backgroundColor: 'rgba(233, 120, 72, 0)',
+                    },
+                    {
+                        label: 'Узел 3',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(236, 84, 122, 1)',
+                        backgroundColor: 'rgba(236, 84, 122, 0)',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            },
+        });
+        var smkChart = new Chart(ctx6, {
+            type: 'line',
+            data: {
+                labels: labels6,
+                datasets: [
+                    {
+                        label: 'Узел 1',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(72, 155, 233, 1)',
+                        backgroundColor: 'rgba(72, 155, 233, 0)',
+                    },
+                    {
+                        label: 'Узел 2',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(233, 120, 72, 1)',
+                        backgroundColor: 'rgba(233, 120, 72, 0)',
+                    },
+                    {
+                        label: 'Узел 3',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: 'rgba(236, 84, 122, 1)',
+                        backgroundColor: 'rgba(236, 84, 122, 0)',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            },
+        });
 
         buttons.forEach(but => but.addEventListener("click", pressedHandler));
         buttons_2.forEach(but => but.addEventListener("click", pressedHandler_2));
+
+        ajaxChartsInit();
+
+        function addData(chart, label, data) {
+            chart.data.labels.push(label);
+            i = 0;
+            chart.data.datasets.forEach((dataset) => {
+                if (i == 0) dataset.data.push(data[0]);
+                if (i == 1) dataset.data.push(data[1]);
+                if (i == 2) dataset.data.push(data[2]);
+                i++;
+            });
+            chart.update();
+        }
+
+        function removeData(chart) {
+            chart.data.labels.splice(0, 1);
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.splice(0, 1);
+            });
+            chart.update();
+        }
 
         function pressedHandler(event) {
             event.preventDefault();
@@ -170,6 +450,7 @@
                 },
                 type: "GET",
                 success: function (data) {
+                    console.log(data);
                     let jsonData = JSON.parse(data);
                     let newDate = new Date();
                     let timeStr = newDate.getHours() + ":" + (newDate.getMinutes());
@@ -177,6 +458,150 @@
                     document.querySelector(".temp").textContent = jsonData.Temperature;
                     document.querySelector(".humi").textContent = jsonData.Humidity;
                     document.querySelector(".mois").textContent = jsonData.Moisture;
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function chartInitHelper(chart, data, time) {
+            let i = 0;
+            while (i < 8) {
+                let arr = new Array();
+                arr[2] = data[i];
+                arr[1] = data[8 + i];
+                arr[0] = data[16 + i];
+                removeData(chart);
+                addData(chart, time, arr);
+                i++;
+            }
+        }
+
+        function ajaxChartsInit() {
+            $.ajax({
+                url: "InitDataToCharts",
+                headers: {
+                    'Accept': 'application/json, text/javascript, /, q=0.01',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                },
+                type: "GET",
+                success: function (data) {
+                    let jsonData = JSON.parse(data);
+
+                    let temp = new Array();
+                    let hum = new Array();
+                    let co = new Array();
+                    let co2 = new Array();
+                    let smk = new Array();
+                    let lpg = new Array();
+
+                    for (let node of jsonData[0].nodeData) {
+                        temp.push(node.temp);
+                        hum.push(node.hum);
+                        co.push(node.co);
+                        co2.push(node.co2);
+                        smk.push(node.smk);
+                        lpg.push(node.lpg);
+                    }
+                    for (let node of jsonData[1].nodeData) {
+                        temp.push(node.temp);
+                        hum.push(node.hum);
+                        co.push(node.co);
+                        co2.push(node.co2);
+                        smk.push(node.smk);
+                        lpg.push(node.lpg);
+                    }
+                    for (let node of jsonData[2].nodeData) {
+                        temp.push(node.temp);
+                        hum.push(node.hum);
+                        co.push(node.co);
+                        co2.push(node.co2);
+                        smk.push(node.smk);
+                        lpg.push(node.lpg);
+                    }
+
+                    temp = temp.reverse();
+                    hum = hum.reverse();
+                    co = co.reverse();
+                    co2 = co2.reverse();
+                    lpg = lpg.reverse();
+                    smk = smk.reverse();
+
+                    chartInitHelper(tempChart, temp, jsonData[0].time);
+                    chartInitHelper(humChart, hum, jsonData[0].time);
+                    chartInitHelper(coChart, co, jsonData[0].time);
+                    chartInitHelper(co2Chart, co2, jsonData[0].time);
+                    chartInitHelper(lpgChart, lpg, jsonData[0].time);
+                    chartInitHelper(smkChart, smk, jsonData[0].time);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function ajaxCharts() {
+            $.ajax({
+                url: "SendDataToCharts",
+                headers: {
+                    'Accept': 'application/json, text/javascript, /, q=0.01',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                },
+                type: "GET",
+                success: function (data) {
+                    let jsonData = JSON.parse(data);
+
+                    let temp = new Array();
+                    let hum = new Array();
+                    let co = new Array();
+                    let co2 = new Array();
+                    let smk = new Array();
+                    let lpg = new Array();
+
+                    let node1 = jsonData[0].nodeData;
+                    temp.push(node1.temp);
+                    hum.push(node1.hum);
+                    co.push(node1.co);
+                    co2.push(node1.co2);
+                    smk.push(node1.smk);
+                    lpg.push(node1.lpg);
+
+                    let node2 = jsonData[1].nodeData;
+                    temp.push(node2.temp);
+                    hum.push(node2.hum);
+                    co.push(node2.co);
+                    co2.push(node2.co2);
+                    smk.push(node2.smk);
+                    lpg.push(node2.lpg);
+
+                    let node3 = jsonData[2].nodeData;
+                    temp.push(node3.temp);
+                    hum.push(node3.hum);
+                    co.push(node3.co);
+                    co2.push(node3.co2);
+                    smk.push(node3.smk);
+                    lpg.push(node3.lpg);
+
+                    removeData(tempChart);
+                    addData(tempChart, jsonData[0].time, temp);
+
+                    removeData(humChart);
+                    addData(humChart, jsonData[0].time, hum);
+
+                    removeData(coChart);
+                    addData(coChart, jsonData[0].time, co);
+
+                    removeData(co2Chart);
+                    addData(co2Chart, jsonData[0].time, co2);
+
+                    removeData(lpgChart);
+                    addData(lpgChart, jsonData[0].time, lpg);
+
+                    removeData(smkChart);
+                    addData(smkChart, jsonData[0].time, smk);
                 },
                 error: function (error) {
                     console.error(error);
@@ -259,7 +684,7 @@
             });
         }
 
-        setInterval(ajaxR, 1000 * 20);
+        setInterval(ajaxCharts, 1000 * 10);
         $('#bulb-on').click(ajaxBuzOn);
         $('#bulb-off').click(ajaxBuzOff);
         $('#relay-on').click(ajaxRelOn);

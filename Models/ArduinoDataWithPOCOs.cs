@@ -14,4 +14,16 @@ namespace Plan_io_T.Models {
         public int lpg { get; set; }
         public int smk { get; set; }
     }
+
+    public class NodesThatContainsData {
+        public int nodeId { get; set; }
+        public string time { get; set; }
+        public ArduinoDataWithPOCOs nodeData { get; set; }
+    }
+
+    public class NodesThatContainsDataLists {
+        public int nodeId { get; set; }
+        public string time { get; set; }
+        public List<ArduinoDataWithPOCOs> nodeData { get; set; }
+    }
 }
