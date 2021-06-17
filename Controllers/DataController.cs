@@ -68,9 +68,21 @@ namespace Plan_io_T.Controllers {
 
         [HttpGet("Data/SendDataToFront")]
         public string SendDataToFront() {
-            string jsonString = "a";
-
+            string jsonString;
+            var item = _context.ArduinoData.Where(p => p.NodeID == 1).OrderByDescending(p => p.ID).FirstOrDefault();
+            ArduinoDataWithPOCOs arduinoDataWithPOCOs = new ArduinoDataWithPOCOs {
+                temp = item.Temperature,
+                hum = item.Humidity,
+                co2 = item.co2Concentration
+            };
+            jsonString = JsonSerializer.Serialize(arduinoDataWithPOCOs);
             return jsonString;
+        }
+
+        [HttpGet("Data/IsMqttConnected")]
+        public string IsMqttConnected() {
+            if(isMqttConnected) return "true";
+            else return "false";
         }
 
         [HttpGet("Data/InitDataToCharts")]
@@ -263,6 +275,7 @@ namespace Plan_io_T.Controllers {
                 .WithQualityOfServiceLevel((MQTTnet.Protocol.MqttQualityOfServiceLevel)qos)
                 .Build());
 
+        [HttpPost]
         private async void SetMQTT() {
             factory = new MqttFactory();
             mqttClient = factory.CreateMqttClient();

@@ -70,11 +70,11 @@
                 </div>
                 <div class="page__main-card-par-sep">
                     <div class="page__main-card-par-sep-h">влажность воздуха</div>
-                    <div class="page__main-card-par-sep-data humi">@ViewData["Humidity"]</div>
+                    <div class="page__main-card-par-sep-data hum">@ViewData["Humidity"]</div>
                 </div>
                 <div class="page__main-card-par-sep">
                     <div class="page__main-card-par-sep-h">концентрация CO2</div>
-                    <div class="page__main-card-par-sep-data mois">@ViewData["co2Concentration"]</div>
+                    <div class="page__main-card-par-sep-data co2">@ViewData["co2Concentration"]</div>
                 </div>
             </div>
         </div>
@@ -151,7 +151,6 @@
 
 @section Scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-    <script src="https://www.chartjs.org/samples/2.9.4/utils.js"></script>
     <script src="~/js/jQuery.js"></script>
     <script src="~/js/dropdown.js"></script>
     <script>
@@ -450,14 +449,13 @@
                 },
                 type: "GET",
                 success: function (data) {
-                    console.log(data);
                     let jsonData = JSON.parse(data);
                     let newDate = new Date();
                     let timeStr = newDate.getHours() + ":" + (newDate.getMinutes());
                     document.querySelector(".time").textContent = timeStr;
-                    document.querySelector(".temp").textContent = jsonData.Temperature;
-                    document.querySelector(".humi").textContent = jsonData.Humidity;
-                    document.querySelector(".mois").textContent = jsonData.Moisture;
+                    document.querySelector(".temp").textContent = jsonData.temp;
+                    document.querySelector(".hum").textContent = jsonData.hum;
+                    document.querySelector(".co2").textContent = jsonData.co2;
                 },
                 error: function (error) {
                     console.error(error);
@@ -685,6 +683,7 @@
         }
 
         setInterval(ajaxCharts, 1000 * 10);
+        setInterval(ajaxR, 1000 * 5);
         $('#bulb-on').click(ajaxBuzOn);
         $('#bulb-off').click(ajaxBuzOff);
         $('#relay-on').click(ajaxRelOn);

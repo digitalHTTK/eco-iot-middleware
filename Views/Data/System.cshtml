@@ -47,73 +47,35 @@
 
     <div class="page__main-card">
         <div>
-            <p>Свойства устройства</p>
+            <p>Свойства подключения к системе</p>
             <div class="page__main-card-rating">
-                <form asp-action="ConectDevice" method="post">
-                    <button class="page__button-checked" type="submit">Подключить порт</button>
-                </form>
+                <div class="con_status">На основе данных мониторинга</div>
             </div>
         </div>
         <div class="page__main-card-par">
             <h1>Параметры подключения</h1>
             <div class="page__main-card-par-all">
                 <div class="page__main-card-par-sep">
-                    <div class="page__main-card-par-sep-h">порт</div>
-                    <div class="page__main-card-par-sep-data">COM6</div>
+                    <div class="page__main-card-par-sep-h">протокол</div>
+                    <div class="page__main-card-par-sep-data">MQTT</div>
                 </div>
                 <div class="page__main-card-par-sep">
-                    <div class="page__main-card-par-sep-h">скорость</div>
-                    <div class="page__main-card-par-sep-data">115200 бод</div>
+                    <div class="page__main-card-par-sep-h">узлы</div>
+                    <div class="page__main-card-par-sep-data">0</div>
                 </div>
                 <div class="page__main-card-par-sep">
-                    <div class="page__main-card-par-sep-h">интерфейс</div>
-                    <div class="page__main-card-par-sep-data">USB</div>
+                    <div class="page__main-card-par-sep-h">брокер</div>
+                    <div class="page__main-card-par-sep-data">Mosquitto</div>
                 </div>
                 <div class="page__main-card-par-sep">
-                    <div class="page__main-card-par-sep-h">тип</div>
-                    <div class="page__main-card-par-sep-data">Serial</div>
+                    <div class="page__main-card-par-sep-h">сеть</div>
+                    <div class="page__main-card-par-sep-data">Qwerty_IoT</div>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="page__small-card">
-        <div class="page__small-card-content">
-            <h1>Эхо-опрос Arduino</h1>
-            <p>Вывод ответа в интерфейс</p>
-            <form asp-action="System" asp-route-_device="arduino" method="post">
-                <button type="submit">Выполнить</button>
-            </form>
-            <h1>Вывод</h1>
-            <div class="page__small-card-output">
-                @ViewData["ArduinoEcho"]
-            </div>
-        </div>
-
-        <div class="page__small-card-content">
-            <h1>Эхо-опрос датчиков</h1>
-            <p>Вывод ответа в интерфейс</p>
-            <form asp-action="System" asp-route-_device="sensors" method="post">
-                <button type="submit">Выполнить</button>
-            </form>
-            <h1>Вывод</h1>
-            <div class="page__small-card-output">
-                @ViewData["SensorsEcho"]
-            </div>
-        </div>
-
-        <div class="page__small-card-content">
-            <h1>Эхо-опрос реле и сервомоторов</h1>
-            <p>Ответ в виде физической реакции компонентов</p>
-            <form asp-action="System" asp-route-_device="relay" method="post">
-                <button type="submit">Выполнить</button>
-            </form>
-            <h1>Вывод</h1>
-            <div class="page__small-card-output">
-                @ViewData["RelayEcho"]
-            </div>
-        </div>
-
     </div>
 
 </div>
@@ -134,4 +96,30 @@
     </div>
 </footer>
 
-<script src="~/js/dropdown.js"></script>
+@section Scripts{
+    <script src="~/js/jQuery.js"></script>
+    <script src="~/js/dropdown.js"></script>
+    <script>
+        function ajaxR() {
+            $.ajax({
+                url: "IsMqttConnected",
+                headers: {
+                    'Accept': 'application/json, text/javascript, /, q=0.01',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                },
+                type: "GET",
+                success: function (data) {
+                    if (data == "true") document.querySelector(".con_status").textContent = "Подключено к MQTT-брокеру";
+                    else document.querySelector(".con_status").textContent = "Отсутствует подключение к MQTT-брокеру";
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        ajaxR();
+        setInterval(ajaxR, 1000 * 5);
+    </script>
+}
