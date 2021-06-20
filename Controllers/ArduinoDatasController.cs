@@ -27,7 +27,7 @@ namespace Plan_io_T.Controllers
         public async Task<IActionResult> Index(int nodeId, string date, int page = 1,
             DataSortState sortOrder = DataSortState.idAsc)
         {
-            int pageSize = 15;
+            int pageSize = 30;
 
             IQueryable<ArduinoData> arduinoDatas = _context.ArduinoData;
             if (nodeId != 0) {

@@ -66,15 +66,15 @@
                 </div>
                 <div class="page__main-card-par-sep">
                     <div class="page__main-card-par-sep-h">температура воздуха</div>
-                    <div class="page__main-card-par-sep-data temp">@ViewData["Temperature"]</div>
+                    <div class="page__main-card-par-sep-data temp">@ViewData["Temperature"] °C</div>
                 </div>
                 <div class="page__main-card-par-sep">
                     <div class="page__main-card-par-sep-h">влажность воздуха</div>
-                    <div class="page__main-card-par-sep-data hum">@ViewData["Humidity"]</div>
+                    <div class="page__main-card-par-sep-data hum">@ViewData["Humidity"]%</div>
                 </div>
                 <div class="page__main-card-par-sep">
-                    <div class="page__main-card-par-sep-h">концентрация CO2</div>
-                    <div class="page__main-card-par-sep-data co2">@ViewData["co2Concentration"]</div>
+                    <div class="page__main-card-par-sep-h">концентрация CO<sub>2</sub></div>
+                    <div class="page__main-card-par-sep-data co2">@ViewData["co2Concentration"] ppm</div>
                 </div>
             </div>
         </div>
@@ -95,7 +95,7 @@
         </div>
 
         <div class="page__small-card-content">
-            <h1>Концентрация окиси углерода</h1>
+            <h1>Концентрация угарного газа</h1>
             <p>Период обновления - 10 секунд</p>
             <canvas id="coChart"></canvas>
         </div>
@@ -451,11 +451,15 @@
                 success: function (data) {
                     let jsonData = JSON.parse(data);
                     let newDate = new Date();
-                    let timeStr = newDate.getHours() + ":" + (newDate.getMinutes());
+                    let hour = newDate.getHours();
+                    let minute = newDate.getMinutes();
+                    if (hour < 10) hour = "0" + newDate.getHours();
+                    if (minute < 10) minute = "0" + newDate.getMinutes();
+                    let timeStr = hour + ":" + minute;
                     document.querySelector(".time").textContent = timeStr;
-                    document.querySelector(".temp").textContent = jsonData.temp;
-                    document.querySelector(".hum").textContent = jsonData.hum;
-                    document.querySelector(".co2").textContent = jsonData.co2;
+                    document.querySelector(".temp").textContent = jsonData.temp + " °C";
+                    document.querySelector(".hum").textContent = jsonData.hum + "%";
+                    document.querySelector(".co2").textContent = jsonData.co2 + " ppm";
                 },
                 error: function (error) {
                     console.error(error);
