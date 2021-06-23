@@ -31,7 +31,7 @@ namespace Plan_io_T.Controllers
 
             IQueryable<ArduinoData> arduinoDatas = _context.ArduinoData;
             if (nodeId != 0) {
-                arduinoDatas = arduinoDatas.Where(p => p.NodeID == nodeId);
+                arduinoDatas = arduinoDatas.Where(p => p.NodeID == nodeId).OrderByDescending(s => s.ID);
             }
             if (!String.IsNullOrEmpty(date)) {
                 arduinoDatas = arduinoDatas.Where(p => p.Date.Contains(date));
@@ -144,7 +144,7 @@ namespace Plan_io_T.Controllers
                 DateTime dateTime = DateTime.Now;
                 arduinoData.Date = dateTime.ToString("dd.MM.yyyy");
                 arduinoData.Time = dateTime.ToString("HH:mm:ss");
-                arduinoData.NodeID = 0;
+                arduinoData.NodeID = 1;
                 _context.Add(arduinoData);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

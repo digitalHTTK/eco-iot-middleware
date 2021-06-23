@@ -153,19 +153,23 @@ header {
 }
 
 .page__purpose-texts > .landing__h1 {
+    font-size: 36pt;
     height: max-content;
     position: relative;
+    padding-top: 36px;
 }
 
-.page__purpose-texts > .landing__text {
-    padding-top: 72px;
-    height: max-content;
-    position: relative;
-}
+    .page__purpose-texts > .landing__text {
+        font-size: 24pt;
+        padding-top: 72px;
+        padding-bottom: 36px;
+        height: max-content;
+        position: relative;
+    }
 
 .purpose__image-frame {
     background-image: url(../media/images/landing/purpose-image.jpg);
-    height: 100vh;
+    height: 110vh;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -239,7 +243,7 @@ header {
 
 .page__system {
     overflow-x: hidden;
-    height: 120vh;
+    height: 140vh;
     background-color: #333;
     display: flex;
     flex-flow: column;
@@ -268,7 +272,7 @@ header {
     flex-flow: column;
     align-items: center;
     width: 100%;
-    height: 60vh;
+    height: 70vh;
 }
 
 .page__reg > h1 {

@@ -24,17 +24,14 @@
             <a asp-controller="Data" asp-action="Dashboard">Назад к панели управления</a>
         </p>
 
-        <form method="get">
+        @*<form method="get">
             <div class="form-inline">
                 <label>Имя: </label>
                 <input name="nodeId" value="@Model.DataFilterViewModel.SelectedNodeId" class="form-control" />
 
-                <label>Компания: </label>
-                <select name="date" value="@Model.DataFilterViewModel.SelectedDate" class="form-control"></select>
-
-                <input type="submit" value="Фильтр" class="btn btn-outline-dark" />
+                <input type="submit" value="Фильтр" style="margin-left: 32px;" class="btn btn-outline-dark" />
             </div>
-        </form>
+        </form>*@
 
         <table class="table">
             <tr>

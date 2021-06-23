@@ -84,37 +84,37 @@
 
         <div class="page__small-card-content">
             <h1>Температура окружающего воздуха</h1>
-            <p>Период обновления - 10 секунд</p>
+            <p>Период обновления - 5 секунд</p>
             <canvas id="tempChart"></canvas>
         </div>
 
         <div class="page__small-card-content">
             <h1>Влажность окружающего воздуха</h1>
-            <p>Период обновления - 10 секунд</p>
+            <p>Период обновления - 5 секунд</p>
             <canvas id="humChart"></canvas>
         </div>
 
         <div class="page__small-card-content">
             <h1>Концентрация угарного газа</h1>
-            <p>Период обновления - 10 секунд</p>
+            <p>Период обновления - 5 секунд</p>
             <canvas id="coChart"></canvas>
         </div>
 
         <div class="page__small-card-content">
             <h1>Концентрация углекислого газа</h1>
-            <p>Период обновления - 10 секунд</p>
+            <p>Период обновления - 5 секунд</p>
             <canvas id="co2Chart"></canvas>
         </div>
 
         <div class="page__small-card-content">
             <h1>Концентрация LPG</h1>
-            <p>Период обновления - 10 секунд</p>
+            <p>Период обновления - 5 секунд</p>
             <canvas id="lpgChart"></canvas>
         </div>
 
         <div class="page__small-card-content">
             <h1>Концентрация дыма</h1>
-            <p>Период обновления - 10 секунд</p>
+            <p>Период обновления - 5 секунд</p>
             <canvas id="smkChart"></canvas>
         </div>
 
@@ -686,8 +686,8 @@
             });
         }
 
-        setInterval(ajaxCharts, 1000 * 10);
-        setInterval(ajaxR, 1000 * 5);
+        setInterval(ajaxCharts, 1000 * 5);
+        setInterval(ajaxR, 1000 * 3);
         $('#bulb-on').click(ajaxBuzOn);
         $('#bulb-off').click(ajaxBuzOff);
         $('#relay-on').click(ajaxRelOn);

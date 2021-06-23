@@ -372,10 +372,10 @@ namespace Plan_io_T.Controllers {
             ViewData["Humidity"] = temp.Humidity;
             ViewData["co2Concentration"] = temp.co2Concentration;
             ViewData["Temperature"] = temp.Temperature;
-            if (temp.Temperature < 10 || temp.Humidity < 20) ViewData["Score"] = "1";
-            else if (temp.Temperature < 14 || temp.Humidity < 40) ViewData["Score"] = "2";
-            else if (temp.Temperature < 16 || temp.Humidity < 60) ViewData["Score"] = "3";
-            else if (temp.Temperature < 20 || temp.Humidity < 80) ViewData["Score"] = "4";
+            if (temp.co2Concentration > 1000) ViewData["Score"] = "1";
+            else if (temp.co2Concentration > 800) ViewData["Score"] = "2";
+            else if (temp.co2Concentration > 700) ViewData["Score"] = "3";
+            else if (temp.co2Concentration > 500) ViewData["Score"] = "4";
             else ViewData["Score"] = "5";
             return View();
         }
